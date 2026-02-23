@@ -48,7 +48,7 @@ namespace net.puk06.TexStackEditor.Editor.Services
 
         private static ExtendedRenderTexture? Build(TSELayerFolder folder)
         {
-            if (!folder.gameObject.activeInHierarchy) return null;
+            if (!folder.gameObject.activeInHierarchy || !folder.LayerNodeConfiguration.IsVisible) return null;
 
             ExtendedRenderTexture? layerProcessedTexture = null;
 
