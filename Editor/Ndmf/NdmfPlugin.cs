@@ -18,8 +18,8 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
         protected override void Configure()
         {
             InPhase(BuildPhase.Transforming)
-                .BeforePlugin("net.rs64.tex-trans-tool")
-                .BeforePlugin("nadena.dev.modular-avatar")
+                .AfterPlugin("net.rs64.tex-trans-tool")
+                .AfterPlugin("nadena.dev.modular-avatar")
                 .BeforePlugin("net.puk06.color-changer")
                 .Run(BuildTextures.Instance)
                 .PreviewingWith(new RealtimePreview());
