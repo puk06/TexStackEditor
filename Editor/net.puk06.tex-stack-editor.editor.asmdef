@@ -1,0 +1,37 @@
+{
+    "name": "net.puk06.tex-stack-editor.editor",
+    "rootNamespace": "",
+    "references": [
+        "net.puk06.tex-stack-editor.runtime",
+        "net.puk06.texture-replacer.runtime",
+        "net.puk06.color-changer.runtime",
+        "nadena.dev.ndmf"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "net.puk06.color-changer",
+            "expression": "1.10.0",
+            "define": "COLOR_CHANGER_FOR_UNITY"
+        },
+        {
+            "name": "net.puk06.color-changer",
+            "expression": "[1.10.0-,2.0.0)",
+            "define": "COLOR_CHANGER_FOR_UNITY_V1"
+        },
+        {
+            "name": "net.puk06.color-changer",
+            "expression": "2.0.0",
+            "define": "COLOR_CHANGER_FOR_UNITY_V2"
+        }
+    ],
+    "noEngineReferences": false
+}

@@ -1,0 +1,80 @@
+{
+    "LanguageName": "ja-JP",
+    "LocalizedLanguageName": "日本語",
+    "LanguagePriority": "0",
+    
+    "Inspector.Stack.Description": "テクスチャレイヤーやレイヤーフォルダをまとめるための親コンポーネントです。このオブジェクトの子オブジェクトのレイヤーが合成され、置き換え先のテクスチャと置き換わります。",
+    "Inspector.Stack.Section.TargetTexture": "ターゲットテクスチャ設定",
+    "Inspector.Stack.Component.TargetTexture": "置き換え先のテクスチャ",
+
+    "Inspector.LayerFolder.Description": "レイヤーをまとめることの出来るコンポーネントです。中に入っているレイヤーをまとめて調整できます。",
+
+    "Inspector.TextureLayer.Description": "テクスチャレイヤー用のコンポーネントです。テクスチャを割り当てることでレイヤーが機能します。一緒に色改変なども出来ます。",
+    "Inspector.TextureLayer.Section.LayerTexture": "レイヤー画像設定",
+    "Inspector.TextureLayer.Component.LayerTexture": "レイヤー画像",
+
+    "Inspector.LayerNode.Section.LayerConfiguration": "レイヤー設定",
+    "Inspector.LayerNode.Section.MaskConfiguration": "マスク設定",
+    "Inspector.LayerNode.Section.ColorAdjustmentConfiguration": "色設定",
+    "Inspector.LayerNode.Section.AdvancedColorConfiguration": "色の追加設定",
+
+    "Inspector.LayerNode.Component.IsVisible": "レイヤーの表示",
+    "Inspector.LayerNode.Component.Opacity": "不透明度",
+    "Inspector.LayerNode.Component.IsEnabled": "有効化",
+    "Inspector.LayerNode.Component.MaskTexture": "マスク画像",
+    "Inspector.LayerNode.Component.MaskSelectionType": "マスク画像選択モード",
+    "Inspector.LayerNode.Component.MaskSelectionType.Options.None": "なし",
+    "Inspector.LayerNode.Component.MaskSelectionType.Options.Black": "黒",
+    "Inspector.LayerNode.Component.MaskSelectionType.Options.White": "白",
+    "Inspector.LayerNode.Component.MaskSelectionType.Options.Opaque": "不透明",
+    "Inspector.LayerNode.Component.MaskSelectionType.Options.Transparent": "透明",
+    "Inspector.LayerNode.Component.MaskBlendSettings.IsBackgroundTransparent": "背景の透明化",
+
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.IsEnabled": "有効化",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.Mode": "色改変モード",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.Mode.Options.Normal": "通常",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.Mode.Options.V1": "バランスモードV1",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.Mode.Options.V2": "バランスモードV2",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.Mode.Options.V3": "バランスモードV3 (おすすめ)",
+
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.Normal.SourceColor": "変更前の色",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.Normal.TargetColor": "変更後の色",
+
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.HSV.Hue": "色相(H)",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.HSV.Saturation": "彩度(S)",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.HSV.Value": "明度(V)",
+
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V1.Description": "選んだ色と各ピクセルの色の距離、およびその延長線上の位置から変化率を計算します。\nデメリット: RGB空間の端に近い色は変化が小さくなります。",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V1.Weight": "重み",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V1.Minimum": "グラフ最低値",
+    
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V2.Description": "選んだ色を中心に球状に色の変化率を計算し、半径の位置を基準とします。\nデメリット: RGB空間の制限を受けませんが、設定が少し複雑です。",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V2.Weight": "重み",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V2.Radius": "半径",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V2.Minimum": "グラフ最低値",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V2.IncludeOutside": "範囲外も含める",
+
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V3.Description": "設定されたグラデーションに沿って、ピクセルの明るさから変化率を決めます。\nデメリット: 色が均一に変わりますが、意図しない部分も変化する可能性があります。",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V3.Gradient": "グラーデション",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V3.Resolution": "LUT解像度",
+
+    "Inspector.LayerNode.Component.AdvancedColorConfiguration.IsEnabled": "有効化",
+    "Inspector.LayerNode.Component.AdvancedColorConfiguration.Hue": "色相(H)",
+    "Inspector.LayerNode.Component.AdvancedColorConfiguration.Saturation": "彩度(S)",
+    "Inspector.LayerNode.Component.AdvancedColorConfiguration.Value": "明度(V)",
+    "Inspector.LayerNode.Component.AdvancedColorConfiguration.Brightness": "明るさ",
+    "Inspector.LayerNode.Component.AdvancedColorConfiguration.Contrast": "コントラスト",
+    "Inspector.LayerNode.Component.AdvancedColorConfiguration.Gamma": "ガンマ",
+    "Inspector.LayerNode.Component.AdvancedColorConfiguration.Exposure": "露出",
+    "Inspector.LayerNode.Component.AdvancedColorConfiguration.Transparency": "透明度",
+
+    "EditorWindow.ComponentManager.Avatar": "アバター",
+    "EditorWindow.ComponentManager.Texture": "テクスチャ: {0} ({1})",
+    "EditorWindow.ComponentManager.EnabledComponent.Info": "有効なコンポーネントのうち、ビルド時に適用されるのは最上位のものだけです。それ以降のコンポーネントは処理されず、エラーとして扱われます。",
+    "EditorWindow.ComponentManager.EnabledComponent": "有効なコンポーネント ({0}) ",
+    "EditorWindow.ComponentManager.DisabledComponent": "無効なコンポーネント ({0}) ",
+    "EditorWindow.ComponentManager.MissingTexture": "未割り当て",
+    
+    "NdmfBuild.Processing.Success": "テクスチャ生成が完了しました！\nコンポーネント: {0}\nテクスチャ: {1}",
+    "NdmfBuild.Processing.Failed": "テクスチャ生成に失敗しました。\nコンポーネント: {0}\nテクスチャ: {1}\n\n他に同じテクスチャを割り当てているコンポーネントがあるか、テクスチャが割り当てられていない可能性があります。\nRenderTextureの作成に失敗した場合も同様です。グラフィックスデバイスが存在しない環境（サーバー・CI等）やVRAM不足が原因として考えられます。"
+}

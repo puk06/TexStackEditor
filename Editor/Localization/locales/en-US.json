@@ -1,0 +1,76 @@
+{
+    "LanguageName": "en-US",
+    "LocalizedLanguageName": "English",
+    "LanguagePriority": "1",
+
+    "Inspector.Stack.Description": "A parent component for grouping texture layers and layer folders. The layers of child objects under this object are composited and replace the target texture.",
+    "Inspector.Stack.Section.TargetTexture": "Target Texture Settings",
+    "Inspector.Stack.Component.TargetTexture": "Target Texture",
+
+    "Inspector.LayerFolder.Description": "A component that can group layers together. Allows you to adjust all contained layers collectively.",
+
+    "Inspector.TextureLayer.Description": "A component for texture layers. The layer functions by assigning a texture. Color adjustments can also be made.",
+    "Inspector.TextureLayer.Section.LayerTexture": "Layer Image Settings",
+    "Inspector.TextureLayer.Component.LayerTexture": "Layer Image",
+
+    "Inspector.LayerNode.Section.LayerConfiguration": "Layer Configuration",
+    "Inspector.LayerNode.Section.MaskConfiguration": "Mask Configuration",
+    "Inspector.LayerNode.Section.ColorAdjustmentConfiguration": "Color Settings",
+    "Inspector.LayerNode.Section.AdvancedColorConfiguration": "Advanced Color Settings",
+
+    "Inspector.LayerNode.Component.IsVisible": "Layer Visibility",
+    "Inspector.LayerNode.Component.Opacity": "Opacity",
+    "Inspector.LayerNode.Component.IsEnabled": "Enable",
+    "Inspector.LayerNode.Component.MaskTexture": "Mask Image",
+    "Inspector.LayerNode.Component.MaskSelectionType": "Mask Image Selection Mode",
+    "Inspector.LayerNode.Component.MaskSelectionType.Options.None": "None",
+    "Inspector.LayerNode.Component.MaskSelectionType.Options.Black": "Black",
+    "Inspector.LayerNode.Component.MaskSelectionType.Options.White": "White",
+    "Inspector.LayerNode.Component.MaskSelectionType.Options.Opaque": "Opaque",
+    "Inspector.LayerNode.Component.MaskSelectionType.Options.Transparent": "Transparent",
+    "Inspector.LayerNode.Component.MaskBlendSettings.IsBackgroundTransparent": "Transparent Background",
+
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.IsEnabled": "Enable",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.Mode": "Color Adjustment Mode",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.Mode.Options.Normal": "Normal",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.Mode.Options.V1": "Balance Mode V1",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.Mode.Options.V2": "Balance Mode V2",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.Mode.Options.V3": "Balance Mode V3 (Recommended)",
+
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.Normal.SourceColor": "Source Color",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.Normal.TargetColor": "Target Color",
+
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V1.Description": "Calculates the rate of change based on the distance between the selected color and each pixel color, and the position on the extension line.\nDisadvantage: Colors near the edge of the RGB space change less.",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V1.Weight": "Weight",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V1.Minimum": "Graph Minimum",
+
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V2.Description": "Calculates the rate of color change in a spherical shape centered on the selected color, based on the radius position.\nDisadvantage: Not limited by RGB space, but settings are a bit complex.",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V2.Weight": "Weight",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V2.Radius": "Radius",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V2.Minimum": "Graph Minimum",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V2.IncludeOutside": "Include Outside Range",
+
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V3.Description": "Determines the rate of change from pixel brightness along the set gradient.\nDisadvantage: Colors change uniformly, but unintended areas may also change.",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V3.Gradient": "Gradient",
+    "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V3.Resolution": "LUT Resolution",
+    
+    "Inspector.LayerNode.Component.AdvancedColorConfiguration.IsEnabled": "Enable",
+    "Inspector.LayerNode.Component.AdvancedColorConfiguration.Hue": "Hue (H)",
+    "Inspector.LayerNode.Component.AdvancedColorConfiguration.Saturation": "Saturation (S)",
+    "Inspector.LayerNode.Component.AdvancedColorConfiguration.Value": "Value (V)",
+    "Inspector.LayerNode.Component.AdvancedColorConfiguration.Brightness": "Brightness",
+    "Inspector.LayerNode.Component.AdvancedColorConfiguration.Contrast": "Contrast",
+    "Inspector.LayerNode.Component.AdvancedColorConfiguration.Gamma": "Gamma",
+    "Inspector.LayerNode.Component.AdvancedColorConfiguration.Exposure": "Exposure",
+    "Inspector.LayerNode.Component.AdvancedColorConfiguration.Transparency": "Transparency",
+
+    "EditorWindow.ComponentManager.Avatar": "Avatar",
+    "EditorWindow.ComponentManager.Texture": "Texture: {0} ({1})",
+    "EditorWindow.ComponentManager.EnabledComponent.Info": "Only the topmost enabled component is applied at build time. Any components below it will not be processed and will be treated as errors.",
+    "EditorWindow.ComponentManager.EnabledComponent": "Enabled Components ({0}) ",
+    "EditorWindow.ComponentManager.DisabledComponent": "Disabled Components ({0}) ",
+    "EditorWindow.ComponentManager.MissingTexture": "Unassigned",
+
+    "NdmfBuild.Processing.Success": "Texture generation complete!\nComponent: {0}\nTexture: {1}",
+    "NdmfBuild.Processing.Failed": "Texture generation failed.\nComponent: {0}\nTexture: {1}\n\nThere may be another component assigned to the same texture, or no texture is assigned at all.\nThis can also occur if RenderTexture creation fails due to an unsupported graphics environment (e.g. server, CI) or insufficient VRAM."
+}

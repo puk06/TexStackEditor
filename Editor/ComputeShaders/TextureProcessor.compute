@@ -1,0 +1,141 @@
+#pragma kernel CSMain
+
+#include "GammaLinear.hlsl"
+#include "ColorConvert.hlsl"
+#include "BalanceModeShader.hlsl"
+#include "AdvancedColorShader.hlsl"
+
+Texture2D<float4> _SourceTex;
+RWTexture2D<float4> _TargetTex;
+
+int _UseMask;
+Texture2D<float4> _MaskTex;
+float2 _MaskTexScale;
+int _MaskSelectionType;
+bool _IsBackgroundTransparent;
+
+int _ColorAdjustmentConfigurationEnabled;
+
+int _ColorMode;
+
+int4 _NormalSourceColor;
+int4 _NormalTargetColor;
+
+float _V1Weight;
+float _V1Minimum;
+
+float _V2Weight;
+float _V2Radius;
+float _V2Minimum;
+bool _V2IncludeOutside;
+
+Texture2D<float4> _V3Gradient;
+int _V3GradientWidth;
+
+int _AdvancedColorConfigurationEnabled;
+float _Hue;
+float _Saturation;
+float _Value;
+float _Brightness;
+float _Contrast;
+float _Gamma;
+float _Exposure;
+float _Transparency;
+
+bool IsMaskSelected(uint2 id)
+{
+    uint width, height;
+    _MaskTex.GetDimensions(width, height);
+
+    uint2 maskUv = id.xy * _MaskTexScale;
+    if (maskUv.x < 0 || maskUv.x >= width || maskUv.y < 0 || maskUv.y >= height) return false;
+
+    int4 color = (int4)(LinearToGammaSpaceExact(_MaskTex[maskUv]) * 255.0);
+
+    if (_MaskSelectionType == 0) return true;
+    if (_MaskSelectionType == 1) return color.r <= 5 && color.g <= 5 && color.b <= 5 && color.a != 0;
+    if (_MaskSelectionType == 2) return color.r >= 250 && color.g >= 250 && color.b >= 250 && color.a != 0;
+    if (_MaskSelectionType == 3) return color.a == 255;
+    if (_MaskSelectionType == 4) return color.a != 0;
+    if (_MaskSelectionType == 5) return color.a == 0;
+
+    return false;
+}
+
+[numthreads(16, 16, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    uint width, height;
+    _TargetTex.GetDimensions(width, height);
+    if (id.x >= width || id.y >= height) return;
+
+    if (_UseMask && !IsMaskSelected(id.xy))
+    {
+        if (_IsBackgroundTransparent)
+        {
+            _TargetTex[id.xy] = float4(0, 0, 0, 0);
+        }
+        else
+        {
+            _TargetTex[id.xy] = _SourceTex[id.xy];
+        }
+        
+        return;
+    }
+
+    if (!_ColorAdjustmentConfigurationEnabled && !_AdvancedColorConfigurationEnabled)
+    {
+        _TargetTex[id.xy] = _SourceTex[id.xy];
+        return;
+    }
+    
+    int4 color = (int4)(LinearToGammaSpaceExact(_SourceTex[id.xy]) * 255.0);
+
+    if (_ColorAdjustmentConfigurationEnabled)
+    {
+        if (_ColorMode == 0)
+        {
+            int3 colorOffset = (int3)_NormalTargetColor - (int3)_NormalSourceColor;
+            color.rgb += colorOffset;
+        }
+        else
+        {
+            color.rgb = BalanceColorAdjustment(
+                color.rgb,
+
+                _ColorMode,
+
+                (int3)_NormalSourceColor,
+                (int3)_NormalTargetColor,
+
+                _V1Weight,
+                _V1Minimum,
+                
+                _V2Radius,
+                _V2Weight,
+                _V2Minimum,
+                _V2IncludeOutside,
+
+                _V3Gradient,
+                _V3GradientWidth
+            );
+        }
+    }
+
+    if (_AdvancedColorConfigurationEnabled)
+    {
+        color = AdvancedColorAdjustment(
+            color,
+            _Hue,
+            _Saturation,
+            _Value,
+            _Brightness,
+            _Contrast,
+            _Gamma,
+            _Exposure,
+            _Transparency
+        );
+    }
+    
+    _TargetTex[id.xy] = GammaToLinearSpaceExact(saturate(color / 255.0));
+}

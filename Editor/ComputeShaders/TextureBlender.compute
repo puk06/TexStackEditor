@@ -1,0 +1,42 @@
+#pragma kernel CSMain
+
+#include "GammaLinear.hlsl"
+
+Texture2D<float4> _BaseTex;
+SamplerState sampler_BaseTex;
+Texture2D<float4> _LayerTex;
+SamplerState sampler_LayerTex;
+
+RWTexture2D<float4> _TargetTex;
+
+int2 _CanvasSize;
+
+float2 _BaseTexScale;
+float2 _LayerTexScale;
+
+float _LayerOpacity;
+
+float4 AlphaBlend(float4 baseCol, float4 layerCol)
+{
+    float3 rgb = layerCol.rgb * layerCol.a + baseCol.rgb * (1 - layerCol.a);
+
+    float a = layerCol.a + baseCol.a * (1 - layerCol.a);
+
+    return float4(rgb, a);
+}
+
+[numthreads(16, 16, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    float2 uv = (id.xy + 0.5) / _CanvasSize;
+    
+    float4 baseCol = _BaseTex.SampleLevel(sampler_BaseTex, uv, 0);
+
+    float4 layerCol = _LayerTex.SampleLevel(sampler_LayerTex, uv, 0);
+
+    layerCol.a = layerCol.a * _LayerOpacity;
+
+    float4 blended = AlphaBlend(baseCol, layerCol);
+
+    _TargetTex[id.xy] = blended;
+}
