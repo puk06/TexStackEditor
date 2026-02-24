@@ -8,7 +8,6 @@ using nadena.dev.ndmf.preview;
 using net.puk06.TexStackEditor.Editor.Extension;
 using net.puk06.TexStackEditor.Editor.Models;
 using net.puk06.TexStackEditor.Editor.Utils;
-using net.puk06.TexStackEditor.Models;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
