@@ -18,13 +18,13 @@ namespace net.puk06.TexStackEditor.Editor
         [MenuItem(MenuBasePath + "Texture Layer Stack (Parent)", false, Pri)]
         private static void AddLayerStack() => AddGameObject<TSETextureLayerStack>("[Parent] TSE TextureLayerStack", Selection.activeGameObject);
 
-        [MenuItem(MenuBasePath + "Layer Folder", false, Pri + 1)]
+        [MenuItem(MenuBasePath + "Add Layer/Layer Folder", false, Pri + 1)]
         private static void AddLayerFolder() => AddGameObject<TSELayerFolder>("[Layer Folder] TSE LayerFolder", Selection.activeGameObject);
 
-        [MenuItem(MenuBasePath + "Texture Layer", false, Pri + 2)]
+        [MenuItem(MenuBasePath + "Add Layer/Texture Layer", false, Pri + 2)]
         private static void AddLayer() => AddGameObject<TSETextureLayer>("[Texture] TSE TextureLayer", Selection.activeGameObject);
 
-        [MenuItem(MenuBasePath + "Add Base Texture Layer", false, Pri + 3)]
+        [MenuItem(MenuBasePath + "Add Layer/Base Texture Layer", false, Pri + 3)]
         private static void AddBaseLayer()
         {
             GameObject activeObject = Selection.activeGameObject;
