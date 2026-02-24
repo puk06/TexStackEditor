@@ -71,11 +71,7 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
             {
                 (TSETextureLayerStack[] parentComponents, TSELayerNode[] childNodeComponents) = group.GetData<(TSETextureLayerStack[], TSELayerNode[])>();
 
-                foreach (TSETextureLayerStack parentComponent in parentComponents)
-                {
-                    context.Observe(parentComponent);
-                    context.ActiveInHierarchy(parentComponent.gameObject);
-                }
+                foreach (TSETextureLayerStack parentComponent in parentComponents) context.Observe(parentComponent);
 
                 foreach (TSELayerNode childNodeComponent in childNodeComponents)
                 {
