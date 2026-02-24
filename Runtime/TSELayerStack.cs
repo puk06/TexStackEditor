@@ -5,7 +5,7 @@ namespace net.puk06.TexStackEditor
 {
     [DisallowMultipleComponent]
     [System.Serializable]
-    public class TSETextureLayerStack : MonoBehaviour, VRC.SDKBase.IEditorOnly
+    public class TSELayerStack : MonoBehaviour, VRC.SDKBase.IEditorOnly
     {
         public Texture2D? TargetTexture;
     }

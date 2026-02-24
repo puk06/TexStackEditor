@@ -7,12 +7,12 @@ using UnityEngine;
 
 namespace net.puk06.TexStackEditor.Editor
 {
-    [CustomEditor(typeof(TSETextureLayerStack))]
-    internal class TSETextureLayerStackInspector : TSEPreviewableInspector
+    [CustomEditor(typeof(TSELayerStack))]
+    internal class TSELayerStackInspector : TSEPreviewableInspector
     {
         public override ExtendedRenderTexture? GeneratePreview()
         {
-            TSETextureLayerStack? component = target as TSETextureLayerStack;
+            TSELayerStack? component = target as TSELayerStack;
             if (component == null || component.TargetTexture == null) return null;
             
             return TextureBuilder.Build(component);

@@ -11,11 +11,11 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
 {
     internal class NdmfProcessor
     {
-        internal static Dictionary<Texture2D, ExtendedRenderTexture> ProcessAllComponents(IEnumerable<TSETextureLayerStack> components, Action<TSETextureLayerStack>? onSuccess = null, Action<TSETextureLayerStack>? onFailed = null)
+        internal static Dictionary<Texture2D, ExtendedRenderTexture> ProcessAllComponents(IEnumerable<TSELayerStack> components, Action<TSELayerStack>? onSuccess = null, Action<TSELayerStack>? onFailed = null)
         {
             Dictionary<Texture2D, ExtendedRenderTexture> result = new();
 
-            foreach (TSETextureLayerStack component in components)
+            foreach (TSELayerStack component in components)
             {
                 if (component.TargetTexture == null || result.ContainsKey(component.TargetTexture))
                 {

@@ -15,8 +15,8 @@ namespace net.puk06.TexStackEditor.Editor
 
         private const string MenuBasePath = "GameObject/TexStackEditor/"; // Base path for the context menu
 
-        [MenuItem(MenuBasePath + "Texture Layer Stack (Parent)", false, Pri)]
-        private static void AddLayerStack() => AddGameObject<TSETextureLayerStack>("[Parent] TSE TextureLayerStack", Selection.activeGameObject);
+        [MenuItem(MenuBasePath + "Layer Stack (Parent)", false, Pri)]
+        private static void AddLayerStack() => AddGameObject<TSELayerStack>("[Parent] TSE LayerStack", Selection.activeGameObject);
 
         [MenuItem(MenuBasePath + "Add Layer/Layer Folder", false, Pri + 1)]
         private static void AddLayerFolder() => AddGameObject<TSELayerFolder>("[Layer Folder] TSE LayerFolder", Selection.activeGameObject);
@@ -28,10 +28,10 @@ namespace net.puk06.TexStackEditor.Editor
         private static void AddBaseLayer()
         {
             GameObject activeObject = Selection.activeGameObject;
-            TSETextureLayerStack? stackComponent = activeObject.GetComponentInParent<TSETextureLayerStack>(true);
+            TSELayerStack? stackComponent = activeObject.GetComponentInParent<TSELayerStack>(true);
             if (stackComponent == null)
             {
-                Debug.LogError("TSETextureLayerStackコンポーネントが見つかりませんでした");
+                Debug.LogError("TSELayerStackコンポーネントが見つかりませんでした");
                 return;
             }
 
@@ -53,7 +53,7 @@ namespace net.puk06.TexStackEditor.Editor
 
             GameObject parentObject = colorChangerComponent.gameObject.transform.parent.gameObject;
 
-            TSETextureLayerStack stackComponent = AddGameObject<TSETextureLayerStack>($"[Parent] TSE {colorChangerComponent.name}", parentObject);
+            TSELayerStack stackComponent = AddGameObject<TSELayerStack>($"[Parent] TSE {colorChangerComponent.name}", parentObject);
             
             Texture2D? replacementTexture = null;
             Texture2D? targetTexture = null;

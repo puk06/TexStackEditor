@@ -26,7 +26,7 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
             {
                 try
                 {
-                    TSETextureLayerStack[] parentComponents = context.GetComponentsInChildren<TSETextureLayerStack>(avatarGameObject, true);
+                    TSELayerStack[] parentComponents = context.GetComponentsInChildren<TSELayerStack>(avatarGameObject, true);
                     if (parentComponents.Length == 0) continue;
 
                     TSELayerNode[] childNodeComponents = context.GetComponentsInChildren<TSELayerNode>(avatarGameObject, true);
@@ -68,9 +68,9 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
 
             try
             {
-                (TSETextureLayerStack[] parentComponents, TSELayerNode[] childNodeComponents) = group.GetData<(TSETextureLayerStack[], TSELayerNode[])>();
+                (TSELayerStack[] parentComponents, TSELayerNode[] childNodeComponents) = group.GetData<(TSELayerStack[], TSELayerNode[])>();
 
-                foreach (TSETextureLayerStack parentComponent in parentComponents) context.Observe(parentComponent);
+                foreach (TSELayerStack parentComponent in parentComponents) context.Observe(parentComponent);
 
                 foreach (TSELayerNode childNodeComponent in childNodeComponents)
                 {
@@ -78,7 +78,7 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
                     context.ActiveInHierarchy(childNodeComponent.gameObject);
                 }
 
-                IEnumerable<TSETextureLayerStack> enabledParentComponents = parentComponents.Where(i => context.ActiveInHierarchy(i.gameObject));
+                IEnumerable<TSELayerStack> enabledParentComponents = parentComponents.Where(i => context.ActiveInHierarchy(i.gameObject));
                 processedTexturesDictionary = NdmfProcessor.ProcessAllComponents(enabledParentComponents);
                 ObjectReferenceService.RegisterReplacements(processedTexturesDictionary);
 

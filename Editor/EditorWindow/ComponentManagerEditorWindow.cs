@@ -20,8 +20,8 @@ namespace net.puk06.TexStackEditor.Editor
         
         private sealed class ComponentStates
         {
-            internal List<TSETextureLayerStack> EnabledComponents = new();
-            internal List<TSETextureLayerStack> DisabledComponents = new();
+            internal List<TSELayerStack> EnabledComponents = new();
+            internal List<TSELayerStack> DisabledComponents = new();
         }
 
         private int _selectedAvatarIndex;
@@ -51,12 +51,12 @@ namespace net.puk06.TexStackEditor.Editor
             {
                 GameObject selectedAvatar = avatars[_selectedAvatarIndex];
 
-                TSETextureLayerStack[] components = selectedAvatar.GetComponentsInChildren<TSETextureLayerStack>(true);
+                TSELayerStack[] components = selectedAvatar.GetComponentsInChildren<TSELayerStack>(true);
                 if (components == null) return;
 
                 Dictionary<Texture2D, ComponentStates> textureComponentDictionary = new();
 
-                foreach (TSETextureLayerStack component in components)
+                foreach (TSELayerStack component in components)
                 {
                     void Check(Texture2D texture)
                     {
@@ -107,9 +107,9 @@ namespace net.puk06.TexStackEditor.Editor
                         if (_foldoutStates[textureComponent.Key].Enabled)
                         {
                             EditorGUI.indentLevel = 3;
-                            foreach (TSETextureLayerStack component in textureComponent.Value.EnabledComponents)
+                            foreach (TSELayerStack component in textureComponent.Value.EnabledComponents)
                             {
-                                EditorGUILayout.ObjectField(component, typeof(TSETextureLayerStack), true);
+                                EditorGUILayout.ObjectField(component, typeof(TSELayerStack), true);
                             }
                             EditorGUI.indentLevel = 2;
                         }
@@ -124,9 +124,9 @@ namespace net.puk06.TexStackEditor.Editor
                         if (_foldoutStates[textureComponent.Key].Disabled)
                         {
                             EditorGUI.indentLevel = 3;
-                            foreach (TSETextureLayerStack component in textureComponent.Value.DisabledComponents)
+                            foreach (TSELayerStack component in textureComponent.Value.DisabledComponents)
                             {
-                                EditorGUILayout.ObjectField(component, typeof(TSETextureLayerStack), true);
+                                EditorGUILayout.ObjectField(component, typeof(TSELayerStack), true);
                             }
                             EditorGUI.indentLevel = 2;
                         }
@@ -137,7 +137,7 @@ namespace net.puk06.TexStackEditor.Editor
                     EditorGUILayout.EndVertical();
                 }
 
-                List<TSETextureLayerStack> missingTextureComponents = components
+                List<TSELayerStack> missingTextureComponents = components
                     .Where(c => c.TargetTexture == null)
                     .ToList();
 
@@ -159,9 +159,9 @@ namespace net.puk06.TexStackEditor.Editor
                     if (_showMissing)
                     {
                         EditorGUI.indentLevel = 3;
-                        foreach (TSETextureLayerStack component in missingTextureComponents)
+                        foreach (TSELayerStack component in missingTextureComponents)
                         {
-                            EditorGUILayout.ObjectField(component, typeof(TSETextureLayerStack), true);
+                            EditorGUILayout.ObjectField(component, typeof(TSELayerStack), true);
                         }
                         EditorGUI.indentLevel = 2;
                     }

@@ -36,9 +36,9 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
         protected override void Execute(BuildContext context)
         {
             GameObject avatar = context.AvatarRootObject;
-            TSETextureLayerStack[] components = avatar.GetComponentsInChildren<TSETextureLayerStack>(false);
+            TSELayerStack[] components = avatar.GetComponentsInChildren<TSELayerStack>(false);
 
-            IEnumerable<TSETextureLayerStack> enabledComponents = components.Where(x => x.gameObject.activeInHierarchy);
+            IEnumerable<TSELayerStack> enabledComponents = components.Where(x => x.gameObject.activeInHierarchy);
             Dictionary<Texture2D, ExtendedRenderTexture> processedTexturesDictionary = NdmfProcessor.ProcessAllComponents(enabledComponents,
                 onSuccess: component =>
                 {
@@ -61,7 +61,7 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
         protected override void Execute(BuildContext context)
         {
             GameObject avatar = context.AvatarRootObject;
-            TSETextureLayerStack[] components = avatar.GetComponentsInChildren<TSETextureLayerStack>(true);
+            TSELayerStack[] components = avatar.GetComponentsInChildren<TSELayerStack>(true);
             TSELayerNode[] childComponents = avatar.GetComponentsInChildren<TSELayerNode>(true);
 
             RemoveAllComponents(components);

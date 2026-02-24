@@ -9,7 +9,7 @@ namespace net.puk06.TexStackEditor.Editor.Services
 {
     internal static class TextureBuilder
     {
-        internal static ExtendedRenderTexture? Build(TSETextureLayerStack parent)
+        internal static ExtendedRenderTexture? Build(TSELayerStack parent)
         {
             if (!parent.gameObject.activeInHierarchy) return null;
             ExtendedRenderTexture? result = null;
