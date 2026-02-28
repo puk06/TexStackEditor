@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
+using nadena.dev.ndmf;
 using nadena.dev.ndmf.preview;
 using net.puk06.TexStackEditor.Editor.Extension;
 using net.puk06.TexStackEditor.Editor.Models;
@@ -84,7 +85,11 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
 
                 foreach ((Renderer original, Renderer proxy) in proxyPairs)
                 {
-                    processedMaterialDictionary[original] = proxy.sharedMaterials.Select(mat => NdmfProcessor.GetProcessedMaterial(mat, processedTexturesDictionary)).ToArray();
+                    processedMaterialDictionary[original] = proxy.sharedMaterials.Select(mat => {
+                        Material? newMaterial = NdmfProcessor.GetProcessedMaterial(mat, processedTexturesDictionary);
+                        ObjectRegistry.RegisterReplacedObject(mat, newMaterial);
+                        return newMaterial;
+                    }).ToArray();
                 }
                 
                 return Task.FromResult<IRenderFilterNode>(new TextureReplacerNode(processedMaterialDictionary, processedTexturesDictionary.Values));
