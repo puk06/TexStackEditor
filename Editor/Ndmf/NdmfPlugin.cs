@@ -22,6 +22,11 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
                 .AfterPlugin("nadena.dev.modular-avatar")
                 .BeforePlugin("net.puk06.color-changer")
                 .Run(BuildTextures.Instance)
+#if LLC_2_4_0_OR_NEWER
+                .BeforePass("io.github.azukimochi.light-limit-changer.normalize-materials")
+#else
+                .BeforePlugin("io.github.azukimochi.light-limit-changer")
+#endif
                 .PreviewingWith(new RealtimePreview());
 
             InPhase(BuildPhase.Optimizing)
