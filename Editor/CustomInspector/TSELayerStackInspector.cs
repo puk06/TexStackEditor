@@ -26,6 +26,10 @@ namespace net.puk06.TexStackEditor.Editor
             UnityService.DrawSectionHeader(LocalizationUtils.Localize("Inspector.Stack.Section.TargetTexture"));
             RenderTargetTextureSection();
 
+            UnityService.DrawSectionHeader(LocalizationUtils.Localize("Inspector.Stack.Section.OutputTexture"));
+            EditorGUILayout.HelpBox(LocalizationUtils.Localize("Inspector.Stack.OutputTextureDescription"), MessageType.Info);
+            RenderOutputTextureSection();
+
             bool changed = serializedObject.ApplyModifiedProperties();
             if (changed) UpdatePreview();
         }
@@ -42,6 +46,28 @@ namespace net.puk06.TexStackEditor.Editor
             EditorGUI.indentLevel = 0;
 
             EditorGUILayout.EndVertical();
+        }
+
+        private void RenderOutputTextureSection()
+        {
+            if (GUILayout.Button(LocalizationUtils.Localize("Inspector.Stack.Button.OutputTexture")))
+            {
+                TSELayerStack? component = target as TSELayerStack;
+                if (component == null) return;
+
+                ExtendedRenderTexture? outputTexture = TextureBuilder.Build(component);
+                if (outputTexture != null)
+                {
+                    string path = EditorUtility.SaveFilePanel(LocalizationUtils.Localize("Inspector.Stack.SaveTextureDialog.Title"), "", "OutputTexture.png", "png");
+                    if (!string.IsNullOrEmpty(path))
+                    {
+                        Texture2D outputTexture2D = outputTexture.ToTexture2D();
+                        byte[] pngData = outputTexture2D.EncodeToPNG();
+                        System.IO.File.WriteAllBytes(path, pngData);
+                        AssetDatabase.Refresh();
+                    }
+                }
+            }
         }
     }
 }

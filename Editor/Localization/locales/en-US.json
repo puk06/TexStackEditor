@@ -6,6 +6,10 @@
     "Inspector.Stack.Description": "A parent component for grouping texture layers and layer folders. The layers of child objects under this object are composited and replace the target texture.",
     "Inspector.Stack.Section.TargetTexture": "Target Texture Settings",
     "Inspector.Stack.Component.TargetTexture": "Target Texture",
+    "Inspector.Stack.Section.OutputTexture": "Manual Output Texture",
+    "Inspector.Stack.OutputTextureDescription": "Manually outputs the texture generated automatically during build. This is usually not necessary, but can be used to check the output texture.",
+    "Inspector.Stack.Button.OutputTexture": "Output Texture",
+    "Inspector.Stack.SaveTextureDialog.Title": "Save Texture",
 
     "Inspector.LayerFolder.Description": "A component that can group layers together. Allows you to adjust all contained layers collectively.",
 

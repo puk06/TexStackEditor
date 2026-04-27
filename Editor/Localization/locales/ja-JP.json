@@ -6,6 +6,10 @@
     "Inspector.Stack.Description": "テクスチャレイヤーやレイヤーフォルダをまとめるための親コンポーネントです。このオブジェクトの子オブジェクトのレイヤーが合成され、置き換え先のテクスチャと置き換わります。",
     "Inspector.Stack.Section.TargetTexture": "ターゲットテクスチャ設定",
     "Inspector.Stack.Component.TargetTexture": "置き換え先のテクスチャ",
+    "Inspector.Stack.Section.OutputTexture": "手動出力テクスチャ",
+    "Inspector.Stack.OutputTextureDescription": "ビルド時に自動で生成されるテクスチャを手動出力します。通常は必要ありませんが、出力されたテクスチャを確認したい場合などに使用してください。",
+    "Inspector.Stack.Button.OutputTexture": "テクスチャを出力",
+    "Inspector.Stack.SaveTextureDialog.Title": "テクスチャの保存",
 
     "Inspector.LayerFolder.Description": "レイヤーをまとめることの出来るコンポーネントです。中に入っているレイヤーをまとめて調整できます。",
 
