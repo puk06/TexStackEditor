@@ -58,7 +58,7 @@ namespace net.puk06.TexStackEditor.Editor
                 ExtendedRenderTexture? outputTexture = TextureBuilder.Build(component);
                 if (outputTexture != null)
                 {
-                    string path = EditorUtility.SaveFilePanel(LocalizationUtils.Localize("Inspector.Stack.SaveTextureDialog.Title"), "", "OutputTexture.png", "png");
+                    string path = EditorUtility.SaveFilePanel(LocalizationUtils.Localize("Inspector.Stack.SaveTextureDialog.Title"), Application.dataPath, "OutputTexture.png", "png");
                     if (!string.IsNullOrEmpty(path))
                     {
                         Texture2D outputTexture2D = outputTexture.ToTexture2D();
