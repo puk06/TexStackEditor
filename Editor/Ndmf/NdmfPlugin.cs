@@ -41,8 +41,7 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
             GameObject avatar = context.AvatarRootObject;
             TSELayerStack[] components = avatar.GetComponentsInChildren<TSELayerStack>(false);
 
-            IEnumerable<TSELayerStack> enabledComponents = components.Where(x => x.gameObject.activeInHierarchy);
-            Dictionary<Texture2D, ExtendedRenderTexture> processedTexturesDictionary = NdmfProcessor.ProcessAllComponents(enabledComponents,
+            Dictionary<Texture2D, ExtendedRenderTexture> processedTexturesDictionary = NdmfProcessor.ProcessAllComponents(components,
                 onSuccess: component =>
                 {
                     string textureName = component.TargetTexture == null ? "Unknown Texture" : component.TargetTexture.name;
