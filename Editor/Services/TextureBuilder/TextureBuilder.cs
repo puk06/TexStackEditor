@@ -11,7 +11,7 @@ namespace net.puk06.TexStackEditor.Editor.Services
     {
         internal static ExtendedRenderTexture? Build(TSELayerStack parent)
         {
-            if (!parent.gameObject.activeInHierarchy) return null;
+            if (!parent.IsActiveTSEComponent()) return null;
             ExtendedRenderTexture? result = null;
 
             foreach (TSELayerNode node in GetNodes(parent.transform))
@@ -48,7 +48,7 @@ namespace net.puk06.TexStackEditor.Editor.Services
 
         private static ExtendedRenderTexture? Build(TSELayerFolder folder)
         {
-            if (!folder.gameObject.activeInHierarchy || !folder.LayerNodeConfiguration.IsVisible) return null;
+            if (!folder.IsActiveTSEComponent()) return null;
 
             ExtendedRenderTexture? layerProcessedTexture = null;
 
@@ -86,7 +86,7 @@ namespace net.puk06.TexStackEditor.Editor.Services
 
         private static ExtendedRenderTexture? Build(TSETextureLayer layer)
         {
-            if (!layer.gameObject.activeInHierarchy || layer.LayerTexture == null || !layer.LayerNodeConfiguration.IsVisible) return null;
+            if (!layer.IsActiveTSEComponent() || layer.LayerTexture == null) return null;
 
             if (!ExtendedRenderTexture.TryCreate(layer.LayerTexture.width, layer.LayerTexture.height, out ExtendedRenderTexture layerTexture))
                 return null;

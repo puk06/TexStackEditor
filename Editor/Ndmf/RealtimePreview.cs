@@ -30,10 +30,17 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
                     TSELayerStack[] parentComponents = context.GetComponentsInChildren<TSELayerStack>(avatarGameObject, true);
                     if (parentComponents.Length == 0) continue;
 
-                    TSELayerNode[] childNodeComponents = context.GetComponentsInChildren<TSELayerNode>(avatarGameObject, true);
+                    foreach (TSELayerStack parentComponent in parentComponents)
+                    {
+                        context.Observe(parentComponent, c => c.TargetTexture);
+                        context.ActiveInHierarchy(parentComponent.gameObject);
+                        context.Observe(parentComponent.gameObject, go => go.tag);
+                    }
+
+                    context.GetComponentsInChildren<TSELayerNode>(avatarGameObject, true);
 
                     IEnumerable<Texture2D?> targetTextures = parentComponents
-                        .Select(c => context.Observe(c, c => c.TargetTexture))
+                        .Select(c => c.TargetTexture)
                         .Distinct();
 
                     List<Renderer> targetRenderers = new();
@@ -50,7 +57,7 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
 
                     if (targetRenderers.Count > 0)
                     {
-                        targetRenderGroups.Add(RenderGroup.For(targetRenderers).WithData((parentComponents, childNodeComponents)));
+                        targetRenderGroups.Add(RenderGroup.For(targetRenderers).WithData(avatarGameObject));
                     }
                 }
                 catch (Exception ex)
@@ -69,18 +76,20 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
 
             try
             {
-                (TSELayerStack[] parentComponents, TSELayerNode[] childNodeComponents) = group.GetData<(TSELayerStack[], TSELayerNode[])>();
+                GameObject root = group.GetData<GameObject>();
 
-                foreach (TSELayerStack parentComponent in parentComponents) context.Observe(parentComponent);
+                TSELayerStack[] parentComponents = root.GetComponentsInChildren<TSELayerStack>(true);
+                if (parentComponents.Length == 0) return Task.FromResult<IRenderFilterNode>(new EmptyNode());
 
+                IEnumerable<TSELayerNode> childNodeComponents = root.GetComponentsInChildren<TSELayerNode>(true);
                 foreach (TSELayerNode childNodeComponent in childNodeComponents)
                 {
                     context.Observe(childNodeComponent);
                     context.ActiveInHierarchy(childNodeComponent.gameObject);
+                    context.Observe(childNodeComponent.gameObject, go => go.tag);
                 }
 
-                IEnumerable<TSELayerStack> enabledParentComponents = parentComponents.Where(i => context.ActiveInHierarchy(i.gameObject));
-                processedTexturesDictionary = NdmfProcessor.ProcessAllComponents(enabledParentComponents);
+                processedTexturesDictionary = NdmfProcessor.ProcessAllComponents(parentComponents);
                 ObjectReferenceService.RegisterReplacements(processedTexturesDictionary);
 
                 foreach ((Renderer original, Renderer proxy) in proxyPairs)
@@ -113,7 +122,8 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
                     processedMaterialDictionary.Clear();
                     processedMaterialDictionary = null;
                 }
-                return Task.FromResult<IRenderFilterNode>(new TextureReplacerNode(null, null));
+
+                return Task.FromResult<IRenderFilterNode>(new EmptyNode());
             }
         }
 
@@ -162,6 +172,16 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
                     _processedMaterialDictionary.Clear();
                     _processedMaterialDictionary = null;
                 }
+            }
+        }
+    
+        private class EmptyNode : IRenderFilterNode
+        {
+            public RenderAspects WhatChanged => 0;
+
+            public void OnFrame(Renderer original, Renderer proxy)
+            {
+                // Do nothing
             }
         }
     }
