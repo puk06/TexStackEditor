@@ -71,7 +71,7 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
 
         public Task<IRenderFilterNode> Instantiate(RenderGroup group, IEnumerable<(Renderer, Renderer)> proxyPairs, ComputeContext context)
         {
-            Dictionary<Texture2D, ExtendedRenderTexture>? processedTexturesDictionary = null;
+            Dictionary<Texture2D, Texture2D>? processedTexturesDictionary = null;
             Dictionary<Renderer, Material?[]>? processedMaterialDictionary = new();
 
             try
@@ -89,7 +89,8 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
                     context.Observe(childNodeComponent.gameObject, go => go.tag);
                 }
 
-                processedTexturesDictionary = NdmfProcessor.ProcessAllComponents(parentComponents);
+                Dictionary<Texture2D, ExtendedRenderTexture> processedTextures = NdmfProcessor.ProcessAllComponents(parentComponents);
+                processedTexturesDictionary = NdmfProcessor.ConvertToTexture2DDictionary(processedTextures);
                 ObjectReferenceService.RegisterReplacements(processedTexturesDictionary);
 
                 foreach ((Renderer original, Renderer proxy) in proxyPairs)
@@ -108,8 +109,8 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
                 LogUtils.LogError($"Failed to instantiate.\n{ex}");
                 if (processedTexturesDictionary != null)
                 {
-                    foreach (ExtendedRenderTexture texture in processedTexturesDictionary.Values)
-                        texture.Dispose();
+                    foreach (Texture2D texture in processedTexturesDictionary.Values)
+                        Object.DestroyImmediate(texture);
                     processedTexturesDictionary.Clear();
                     processedTexturesDictionary = null;
                 }
@@ -129,12 +130,12 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
 
         private class TextureReplacerNode : IRenderFilterNode, IDisposable
         {
-            private IEnumerable<ExtendedRenderTexture>? _processedTextures;
+            private IEnumerable<Texture2D>? _processedTextures;
             private Dictionary<Renderer, Material?[]>? _processedMaterialDictionary;
 
             public RenderAspects WhatChanged { get; private set; } = RenderAspects.Texture | RenderAspects.Material;
 
-            public TextureReplacerNode(Dictionary<Renderer, Material?[]>? processedMaterialDictionary, IEnumerable<ExtendedRenderTexture>? processedTexturesDictionary)
+            public TextureReplacerNode(Dictionary<Renderer, Material?[]>? processedMaterialDictionary, IEnumerable<Texture2D>? processedTexturesDictionary)
             {
                 _processedMaterialDictionary = processedMaterialDictionary;
                 _processedTextures = processedTexturesDictionary;
@@ -159,8 +160,8 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
             {
                 if (_processedTextures != null)
                 {
-                    foreach (ExtendedRenderTexture texture in _processedTextures)
-                        texture.Dispose();
+                    foreach (Texture2D texture in _processedTextures)
+                        Object.DestroyImmediate(texture);
                     _processedTextures = null;
                 }
 
