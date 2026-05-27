@@ -132,7 +132,7 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
             private IEnumerable<ExtendedRenderTexture>? _processedTextures;
             private Dictionary<Renderer, Material?[]>? _processedMaterialDictionary;
 
-            public RenderAspects WhatChanged { get; private set; } = RenderAspects.Texture & RenderAspects.Material;
+            public RenderAspects WhatChanged { get; private set; } = RenderAspects.Texture | RenderAspects.Material;
 
             public TextureReplacerNode(Dictionary<Renderer, Material?[]>? processedMaterialDictionary, IEnumerable<ExtendedRenderTexture>? processedTexturesDictionary)
             {
