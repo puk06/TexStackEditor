@@ -15,11 +15,59 @@ float2 _BaseTexScale;
 float2 _LayerTexScale;
 
 float _LayerOpacity;
+int _LayerBlendMode;
 
-float4 AlphaBlend(float4 baseCol, float4 layerCol)
+float3 BlendColor(float3 baseRgb, float3 layerRgb, int blendMode)
 {
-    float3 rgb = layerCol.rgb * layerCol.a + baseCol.rgb * (1 - layerCol.a);
+    if (blendMode == 1)
+    {
+        return baseRgb * layerRgb;
+    }
 
+    if (blendMode == 2)
+    {
+        return 1.0 - (1.0 - baseRgb) * (1.0 - layerRgb);
+    }
+
+    if (blendMode == 3)
+    {
+        return saturate(baseRgb + layerRgb);
+    }
+
+    if (blendMode == 4)
+    {
+        return saturate(baseRgb - layerRgb);
+    }
+
+    if (blendMode == 5)
+    {
+        return min(baseRgb, layerRgb);
+    }
+
+    if (blendMode == 6)
+    {
+        return max(baseRgb, layerRgb);
+    }
+
+    if (blendMode == 7)
+    {
+        return abs(baseRgb - layerRgb);
+    }
+
+    if (blendMode == 8)
+    {
+        float3 low = 2.0 * baseRgb * layerRgb;
+        float3 high = 1.0 - 2.0 * (1.0 - baseRgb) * (1.0 - layerRgb);
+        return lerp(high, low, step(baseRgb, 0.5));
+    }
+
+    return layerRgb;
+}
+
+float4 BlendWithMode(float4 baseCol, float4 layerCol, int blendMode)
+{
+    float3 blendedRgb = BlendColor(baseCol.rgb, layerCol.rgb, blendMode);
+    float3 rgb = lerp(baseCol.rgb, blendedRgb, layerCol.a);
     float a = layerCol.a + baseCol.a * (1 - layerCol.a);
 
     return float4(rgb, a);
@@ -36,7 +84,7 @@ void CSMain(uint3 id : SV_DispatchThreadID)
 
     layerCol.a = layerCol.a * _LayerOpacity;
 
-    float4 blended = AlphaBlend(baseCol, layerCol);
+    float4 blended = BlendWithMode(baseCol, layerCol, _LayerBlendMode);
 
     _TargetTex[id.xy] = blended;
 }

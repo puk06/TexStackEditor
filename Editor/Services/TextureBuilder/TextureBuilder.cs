@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using net.puk06.TexStackEditor.Editor.Extension;
 using net.puk06.TexStackEditor.Editor.Models;
 using net.puk06.TexStackEditor.Editor.Utils;
+using net.puk06.TexStackEditor.Models;
 using UnityEngine;
 
 namespace net.puk06.TexStackEditor.Editor.Services
@@ -24,7 +25,7 @@ namespace net.puk06.TexStackEditor.Editor.Services
                     if (result == null && !ExtendedRenderTexture.TryCreate(layerTexture.width, layerTexture.height, out result))
                         return null;
 
-                    ExtendedRenderTexture? blendedTexture = Blend(result, layerTexture, node.LayerNodeConfiguration.Opacity);
+                    ExtendedRenderTexture? blendedTexture = Blend(result, layerTexture, node.LayerNodeConfiguration.Opacity, node.LayerNodeConfiguration.BlendMode);
                     if (blendedTexture == null)
                     {
                         result.Dispose();
@@ -64,7 +65,7 @@ namespace net.puk06.TexStackEditor.Editor.Services
 
                     if (layerProcessedTexture == null) return null;
 
-                    ExtendedRenderTexture? blendedTexture = Blend(layerProcessedTexture, layerTexture, node.LayerNodeConfiguration.Opacity);
+                    ExtendedRenderTexture? blendedTexture = Blend(layerProcessedTexture, layerTexture, node.LayerNodeConfiguration.Opacity, node.LayerNodeConfiguration.BlendMode);
                     if (blendedTexture == null)
                     {
                         layerProcessedTexture.Dispose();
@@ -107,7 +108,7 @@ namespace net.puk06.TexStackEditor.Editor.Services
             }
         }
 
-        private static ExtendedRenderTexture? Blend(RenderTexture baseTexture, RenderTexture layerTexture, float layerOpacity)
+        private static ExtendedRenderTexture? Blend(RenderTexture baseTexture, RenderTexture layerTexture, float layerOpacity, LayerBlendMode layerBlendMode)
         {
             ComputeShader? blenderShader = TSEShaderEngine.TextureBlenderComputeShader;
             if (blenderShader == null) TSEShaderEngine.LoadShaders();
@@ -139,6 +140,7 @@ namespace net.puk06.TexStackEditor.Editor.Services
             blenderShader.SetVector("_LayerTexScale", layerScale);
 
             blenderShader.SetFloat("_LayerOpacity", layerOpacity);
+            blenderShader.SetInt("_LayerBlendMode", (int)layerBlendMode);
 
             int threadGroupX = Mathf.CeilToInt(canvasWidth / 16.0f);
             int threadGroupY = Mathf.CeilToInt(canvasHeight / 16.0f);

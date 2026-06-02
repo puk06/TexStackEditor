@@ -47,6 +47,22 @@ namespace net.puk06.TexStackEditor.Editor
                 EditorGUI.indentLevel = 2;
 
                 EditorGUILayout.PropertyField(LayerNodeConfigurationProp.FindPropertyRelative("Opacity"), new GUIContent(LocalizationUtils.Localize("Inspector.LayerNode.Component.Opacity")));
+                SerializedProperty blendModeProperty = LayerNodeConfigurationProp.FindPropertyRelative("BlendMode");
+
+                string[] blendModeLabels =
+                {
+                    LocalizationUtils.Localize("Inspector.LayerNode.Component.BlendMode.Options.Normal"),
+                    LocalizationUtils.Localize("Inspector.LayerNode.Component.BlendMode.Options.Multiply"),
+                    LocalizationUtils.Localize("Inspector.LayerNode.Component.BlendMode.Options.Screen"),
+                    LocalizationUtils.Localize("Inspector.LayerNode.Component.BlendMode.Options.Add"),
+                    LocalizationUtils.Localize("Inspector.LayerNode.Component.BlendMode.Options.Subtract"),
+                    LocalizationUtils.Localize("Inspector.LayerNode.Component.BlendMode.Options.Darken"),
+                    LocalizationUtils.Localize("Inspector.LayerNode.Component.BlendMode.Options.Lighten"),
+                    LocalizationUtils.Localize("Inspector.LayerNode.Component.BlendMode.Options.Difference"),
+                    LocalizationUtils.Localize("Inspector.LayerNode.Component.BlendMode.Options.Overlay")
+                };
+
+                blendModeProperty.enumValueIndex = EditorGUILayout.Popup(LocalizationUtils.Localize("Inspector.LayerNode.Component.BlendMode"), blendModeProperty.enumValueIndex, blendModeLabels);
                 
                 EditorGUI.indentLevel = 1;
             }
