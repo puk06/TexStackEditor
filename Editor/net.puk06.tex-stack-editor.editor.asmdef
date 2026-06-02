@@ -33,6 +33,11 @@
             "define": "COLOR_CHANGER_FOR_UNITY_V2"
         },
         {
+            "name": "net.puk06.color-changer",
+            "expression": "2.0.11",
+            "define": "COLOR_CHANGER_FOR_UNITY_V2_2_0_11_OR_NEWER"
+        },
+        {
             "name": "io.github.azukimochi.light-limit-changer",
             "expression": "2.4.0",
             "define": "LLC_2_4_0_OR_NEWER"
