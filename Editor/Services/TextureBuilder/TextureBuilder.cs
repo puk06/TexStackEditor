@@ -198,8 +198,8 @@ namespace net.puk06.TexStackEditor.Editor.Services
 
             processorShader.SetBool("_AdvancedColorConfigurationEnabled", node.AdvancedColorConfiguration.IsEnabled);
             processorShader.SetFloat("_Hue", node.AdvancedColorConfiguration.Hue / 360f);
-            processorShader.SetFloat("_Saturation", node.AdvancedColorConfiguration.Saturation / 100f);
-            processorShader.SetFloat("_Value", node.AdvancedColorConfiguration.Value / 100f);
+            processorShader.SetFloat("_Saturation", node.AdvancedColorConfiguration.Saturation);
+            processorShader.SetFloat("_Value", node.AdvancedColorConfiguration.Value);
             processorShader.SetFloat("_Brightness", node.AdvancedColorConfiguration.Brightness);
             processorShader.SetFloat("_Contrast", node.AdvancedColorConfiguration.Contrast);
             processorShader.SetFloat("_Gamma", node.AdvancedColorConfiguration.Gamma);

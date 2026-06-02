@@ -162,9 +162,9 @@ namespace net.puk06.TexStackEditor.Editor
             node.ColorAdjustmentConfiguration.V3ColorSettings.Resolution = component.BalanceModeConfiguration.V3GradientResolution;
 
             node.AdvancedColorConfiguration.IsEnabled = component.AdvancedColorConfiguration.IsEnabled;
-            node.AdvancedColorConfiguration.Hue = component.AdvancedColorConfiguration.Hue;
-            node.AdvancedColorConfiguration.Saturation = component.AdvancedColorConfiguration.Saturation;
-            node.AdvancedColorConfiguration.Value = component.AdvancedColorConfiguration.Value;
+            node.AdvancedColorConfiguration.Hue = AdvancedColorConfiguration.ConvertLegacyDegreesHueToCurrent(component.AdvancedColorConfiguration.Hue);
+            node.AdvancedColorConfiguration.Saturation = AdvancedColorConfiguration.ConvertLegacyStrengthToCurrent(component.AdvancedColorConfiguration.Saturation);
+            node.AdvancedColorConfiguration.Value = AdvancedColorConfiguration.ConvertLegacyStrengthToCurrent(component.AdvancedColorConfiguration.Value);
             node.AdvancedColorConfiguration.Brightness = component.AdvancedColorConfiguration.Brightness;
             node.AdvancedColorConfiguration.Contrast = component.AdvancedColorConfiguration.Contrast;
             node.AdvancedColorConfiguration.Gamma = component.AdvancedColorConfiguration.Gamma;
