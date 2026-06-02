@@ -2,6 +2,8 @@
 using UnityEditor;
 using UnityEngine;
 using net.puk06.TexStackEditor.Models;
+using System.Linq;
+
 
 #if COLOR_CHANGER_FOR_UNITY
 using net.puk06.ColorChanger;
@@ -15,16 +17,35 @@ namespace net.puk06.TexStackEditor.Editor
 
         private const string MenuBasePath = "GameObject/TexStackEditor/"; // Base path for the context menu
 
-        [MenuItem(MenuBasePath + "Layer Stack (Parent)", false, Pri)]
-        private static void AddLayerStack() => AddGameObject<TSELayerStack>("[Parent] TSE LayerStack", Selection.activeGameObject);
+        [MenuItem(MenuBasePath + "Layer Stack (Parent)/Main Texture", false, Pri)]
+        private static void AddLayerStackWithTexture()
+        {
+            Texture? mainTexture = GetMainTextureFromGameobject(Selection.activeGameObject);
+            
+            TSELayerStack stackComponent = AddGameObject<TSELayerStack>("[Parent] TSE LayerStack", Selection.activeGameObject);
+            if (mainTexture != null)
+            {
+                stackComponent.TargetTexture = mainTexture as Texture2D;
+                stackComponent.name = $"[Parent] TSE LayerStack For {mainTexture.name}";
 
-        [MenuItem(MenuBasePath + "Add Layer/Layer Folder", false, Pri + 1)]
+                Debug.Log($"TargetTexture set to '{mainTexture.name}' on '{stackComponent.name}'.");
+            }
+            else
+            {
+                Debug.Log($"No main texture found on the selected object. Created '{stackComponent.name}' without setting TargetTexture.");
+            }
+        }
+
+        [MenuItem(MenuBasePath + "Layer Stack (Parent)/Empty", false, Pri + 1)]
+        private static void AddEmptyLayerStack() => AddGameObject<TSELayerStack>("[Parent] TSE LayerStack", Selection.activeGameObject);
+
+        [MenuItem(MenuBasePath + "Add Layer/Layer Folder", false, Pri + 2)]
         private static void AddLayerFolder() => AddGameObject<TSELayerFolder>("[Layer Folder] TSE LayerFolder", Selection.activeGameObject);
 
-        [MenuItem(MenuBasePath + "Add Layer/Texture Layer", false, Pri + 2)]
+        [MenuItem(MenuBasePath + "Add Layer/Texture Layer", false, Pri + 3)]
         private static void AddLayer() => AddGameObject<TSETextureLayer>("[Texture] TSE TextureLayer", Selection.activeGameObject);
 
-        [MenuItem(MenuBasePath + "Add Layer/Base Texture Layer", false, Pri + 3)]
+        [MenuItem(MenuBasePath + "Add Layer/Base Texture Layer", false, Pri + 4)]
         private static void AddBaseLayer()
         {
             GameObject activeObject = Selection.activeGameObject;
@@ -40,7 +61,7 @@ namespace net.puk06.TexStackEditor.Editor
         }
 
 #if COLOR_CHANGER_FOR_UNITY
-        [MenuItem(MenuBasePath + "Color Changer For Unity/Import from Color Changer for Unity (CC4U)", false, Pri + 4)]
+        [MenuItem(MenuBasePath + "Color Changer For Unity/Import from Color Changer for Unity (CC4U)", false, Pri + 5)]
         private static void CreateFromColorChangerForUnity()
         {
             GameObject activeObject = Selection.activeGameObject;
@@ -87,7 +108,7 @@ namespace net.puk06.TexStackEditor.Editor
             ConvertValueFromColorChangerForUnity(colorChangerComponent, layerFolderComponent);
         }
 
-        [MenuItem(MenuBasePath + "Color Changer For Unity/Convert to Texture Layer", false, Pri + 5)]
+        [MenuItem(MenuBasePath + "Color Changer For Unity/Convert to Texture Layer", false, Pri + 6)]
         private static void ConvertToTextureLayer()
         {
             GameObject activeObject = Selection.activeGameObject;
@@ -221,6 +242,25 @@ namespace net.puk06.TexStackEditor.Editor
             PingObject(tseObject);
 
             return component;
+        }
+
+        private static Texture? GetMainTextureFromGameobject(GameObject gameObject)
+        {
+            if (gameObject == null) return null;
+
+            Renderer[] renderers = gameObject.GetComponents<Renderer>();
+            if (renderers == null || renderers.Length == 0) return null;
+
+            Renderer renderer = renderers.FirstOrDefault();
+            if (renderer == null) return null;
+
+            Material[] materials = renderer.sharedMaterials;
+            if (materials == null || materials.Length == 0) return null;
+
+            Material mainMaterial = materials.FirstOrDefault();
+            if (mainMaterial == null) return null;
+
+            return mainMaterial.mainTexture;
         }
         
         private static void PingObject(GameObject gameObject)
