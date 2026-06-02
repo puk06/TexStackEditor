@@ -81,7 +81,7 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
                 TSELayerStack[] parentComponents = root.GetComponentsInChildren<TSELayerStack>(true);
                 if (parentComponents.Length == 0) return Task.FromResult<IRenderFilterNode>(new EmptyNode());
 
-                IEnumerable<TSELayerNode> childNodeComponents = root.GetComponentsInChildren<TSELayerNode>(true);
+                IEnumerable<TSELayerNode> childNodeComponents = context.GetComponentsInChildren<TSELayerNode>(root, true);
                 foreach (TSELayerNode childNodeComponent in childNodeComponents)
                 {
                     context.Observe(childNodeComponent);
