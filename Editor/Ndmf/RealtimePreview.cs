@@ -44,7 +44,7 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
                         .Distinct();
 
                     List<Renderer> targetRenderers = new();
-                    foreach (Renderer avatarRenderer in avatarGameObject.GetComponentsInChildren<Renderer>().Where(r => r is MeshRenderer or SkinnedMeshRenderer))
+                    foreach (Renderer avatarRenderer in avatarGameObject.GetComponentsInChildren<Renderer>(true).Where(r => r is MeshRenderer or SkinnedMeshRenderer))
                     {
                         Material[] materials = avatarRenderer.sharedMaterials;
                         if (materials == null) continue;
