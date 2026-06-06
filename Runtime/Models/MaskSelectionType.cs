@@ -7,6 +7,8 @@ namespace net.puk06.TexStackEditor.Models
         White,
         Opaque,
         Opaque1,
-        Transparent
+        Transparent,
+        BlackGlayScale,
+        WhiteGlayScale
     }
 }

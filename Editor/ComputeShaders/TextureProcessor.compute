@@ -58,8 +58,22 @@ bool IsMaskSelected(uint2 id)
     if (_MaskSelectionType == 3) return color.a == 255;
     if (_MaskSelectionType == 4) return color.a != 0;
     if (_MaskSelectionType == 5) return color.a == 0;
+    if (_MaskSelectionType == 6 || _MaskSelectionType == 7) return true; // GrayScale Mask
 
     return false;
+}
+
+int4 MaskColor(uint2 id)
+{
+    uint width, height;
+    _MaskTex.GetDimensions(width, height);
+
+    uint2 maskUv = id.xy * _MaskTexScale;
+    if (maskUv.x < 0 || maskUv.x >= width || maskUv.y < 0 || maskUv.y >= height) return int4(0, 0, 0, 0);
+
+    int4 color = (int4)(LinearToGammaSpaceExact(_MaskTex[maskUv]) * 255.0);
+
+    return color;
 }
 
 [numthreads(16, 16, 1)]
@@ -135,6 +149,32 @@ void CSMain(uint3 id : SV_DispatchThreadID)
             _Exposure,
             _Transparency
         );
+    }
+
+    if (_UseMask && (_MaskSelectionType == 6 || _MaskSelectionType == 7))
+    {
+        const float grayScaleWeightR = 0.299;
+        const float grayScaleWeightG = 0.587;
+        const float grayScaleWeightB = 0.114;
+
+        int4 maskColor = MaskColor(id.xy);
+
+        float grayScale = (
+            grayScaleWeightR * (maskColor.r / 255.0) +
+            grayScaleWeightG * (maskColor.g / 255.0) +
+            grayScaleWeightB * (maskColor.b / 255.0)
+        );
+        
+        float maskFactor = saturate(grayScale);
+
+        if (_MaskSelectionType == 6) // GrayScale Mask (Black)
+        {
+            color = int4(color.rgb, (1 - maskFactor) * 255.0);
+        }
+        else if (_MaskSelectionType == 7) // GrayScale Mask (White)
+        {
+            color = int4(color.rgb, maskFactor * 255.0);
+        }
     }
     
     _TargetTex[id.xy] = GammaToLinearSpaceExact(saturate(color / 255.0));

@@ -42,6 +42,8 @@
     "Inspector.LayerNode.Component.MaskSelectionType.Options.White": "白",
     "Inspector.LayerNode.Component.MaskSelectionType.Options.Opaque": "不透明",
     "Inspector.LayerNode.Component.MaskSelectionType.Options.Transparent": "透明",
+    "Inspector.LayerNode.Component.MaskSelectionType.Options.BlackGlayScale": "黒（グレースケール）",
+    "Inspector.LayerNode.Component.MaskSelectionType.Options.WhiteGlayScale": "白（グレースケール）",
     "Inspector.LayerNode.Component.MaskBlendSettings.IsBackgroundTransparent": "背景の透明化",
 
     "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.IsEnabled": "有効化",
