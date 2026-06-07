@@ -99,8 +99,6 @@ namespace net.puk06.TexStackEditor.Editor
                     string.Format("{0} (A = 255)", LocalizationUtils.Localize("Inspector.LayerNode.Component.MaskSelectionType.Options.Opaque")),
                     string.Format("{0} (A ≠ 0)", LocalizationUtils.Localize("Inspector.LayerNode.Component.MaskSelectionType.Options.Opaque")),
                     string.Format("{0} (A = 0)", LocalizationUtils.Localize("Inspector.LayerNode.Component.MaskSelectionType.Options.Transparent")),
-                    LocalizationUtils.Localize("Inspector.LayerNode.Component.MaskSelectionType.Options.BlackGlayScale"),
-                    LocalizationUtils.Localize("Inspector.LayerNode.Component.MaskSelectionType.Options.WhiteGlayScale")
                 };
 
                 maskSelectionTypeProperty.enumValueIndex = EditorGUILayout.Popup(LocalizationUtils.Localize("Inspector.LayerNode.Component.MaskSelectionType"), maskSelectionTypeProperty.enumValueIndex, maskSelectionTypeLabels);

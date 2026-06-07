@@ -42,8 +42,6 @@
     "Inspector.LayerNode.Component.MaskSelectionType.Options.White": "White",
     "Inspector.LayerNode.Component.MaskSelectionType.Options.Opaque": "Opaque",
     "Inspector.LayerNode.Component.MaskSelectionType.Options.Transparent": "Transparent",
-    "Inspector.LayerNode.Component.MaskSelectionType.Options.BlackGlayScale": "Black (GlayScale)",
-    "Inspector.LayerNode.Component.MaskSelectionType.Options.WhiteGlayScale": "White (GlayScale)",
     "Inspector.LayerNode.Component.MaskBlendSettings.IsBackgroundTransparent": "Transparent Background",
 
     "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.IsEnabled": "Enable",
