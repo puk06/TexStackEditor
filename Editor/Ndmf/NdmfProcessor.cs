@@ -57,14 +57,14 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
         {
             if (processedTexturesDictionary.Count == 0) return;
 
-            Dictionary<Material, Material> materialMap = new();
+            var materialMap = new Dictionary<Material, Material>();
             
-            foreach (Renderer renderer in renderers)
+            foreach (var renderer in renderers)
             {
                 Material?[] materials = renderer.sharedMaterials;
                 bool changed = false;
 
-                foreach (ref Material? material in materials.AsSpan())
+                foreach (ref var material in materials.AsSpan())
                 {
                     if (material == null) continue;
                     if (materialMap.TryGetValue(material, out Material? cloned))

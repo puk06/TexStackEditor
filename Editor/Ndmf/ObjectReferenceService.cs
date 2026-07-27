@@ -11,7 +11,7 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
             where TKey : Object
             where TValue : Object
         {
-            foreach (KeyValuePair<TKey, TValue> objectKpv in objectDictionary)
+            foreach (var objectKpv in objectDictionary)
             {
                 ObjectRegistry.RegisterReplacedObject(objectKpv.Key, objectKpv.Value);
             }

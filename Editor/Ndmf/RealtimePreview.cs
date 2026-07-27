@@ -42,7 +42,7 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
                         .Distinct();
 
                     var targetRenderers = new List<Renderer>();
-                    foreach (Renderer avatarRenderer in context.GetComponentsInChildren<Renderer>(avatarGameObject, true).Where(r => r is MeshRenderer or SkinnedMeshRenderer))
+                    foreach (var avatarRenderer in context.GetComponentsInChildren<Renderer>(avatarGameObject, true).Where(r => r is MeshRenderer or SkinnedMeshRenderer))
                     {
                         var materials = context.Observe(avatarRenderer, i => i.sharedMaterials, (a, b) => a != null && b != null && a.SequenceEqual(b));
                         if (materials == null) continue;

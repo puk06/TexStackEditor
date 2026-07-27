@@ -39,7 +39,7 @@ namespace net.puk06.TexStackEditor.Editor
         {
             LocalizationUtils.DrawLanguageSelectionPopup();
 
-            GameObject[] avatars = FindObjectsOfType<VRC_AvatarDescriptor>().Select(c => c.gameObject).ToArray();
+            var avatars = FindObjectsOfType<VRC_AvatarDescriptor>().Select(c => c.gameObject).ToArray();
             if (avatars.Length == 0) return;
 
             _selectedAvatarIndex = Mathf.Clamp(_selectedAvatarIndex, 0, avatars.Length - 1);
@@ -49,20 +49,20 @@ namespace net.puk06.TexStackEditor.Editor
 
             if (_selectedAvatarIndex >= 0 && _selectedAvatarIndex < avatars.Length && avatars[_selectedAvatarIndex] != null)
             {
-                GameObject selectedAvatar = avatars[_selectedAvatarIndex];
+                var selectedAvatar = avatars[_selectedAvatarIndex];
 
-                TSELayerStack[] components = selectedAvatar.GetComponentsInChildren<TSELayerStack>(true);
+                var components = selectedAvatar.GetComponentsInChildren<TSELayerStack>(true);
                 if (components == null) return;
 
-                Dictionary<Texture2D, ComponentStates> textureComponentDictionary = new();
+                var textureComponentDictionary = new Dictionary<Texture2D, ComponentStates>();
 
-                foreach (TSELayerStack component in components)
+                foreach (var component in components)
                 {
                     void Check(Texture2D texture)
                     {
                         if (!textureComponentDictionary.ContainsKey(texture)) textureComponentDictionary[texture] = new();
 
-                        ComponentStates componentStates = textureComponentDictionary[texture];
+                        var componentStates = textureComponentDictionary[texture];
                         
                         if (component.gameObject.activeInHierarchy)
                         {
@@ -77,7 +77,7 @@ namespace net.puk06.TexStackEditor.Editor
                     if (component.TargetTexture != null) Check(component.TargetTexture);
                 }
 
-                foreach (KeyValuePair<Texture2D, ComponentStates> textureComponent in textureComponentDictionary)
+                foreach (var textureComponent in textureComponentDictionary)
                 {
                     EditorGUILayout.BeginVertical(EditorStyles.helpBox);
 
@@ -107,7 +107,7 @@ namespace net.puk06.TexStackEditor.Editor
                         if (_foldoutStates[textureComponent.Key].Enabled)
                         {
                             EditorGUI.indentLevel = 3;
-                            foreach (TSELayerStack component in textureComponent.Value.EnabledComponents)
+                            foreach (var component in textureComponent.Value.EnabledComponents)
                             {
                                 EditorGUILayout.ObjectField(component, typeof(TSELayerStack), true);
                             }
@@ -124,7 +124,7 @@ namespace net.puk06.TexStackEditor.Editor
                         if (_foldoutStates[textureComponent.Key].Disabled)
                         {
                             EditorGUI.indentLevel = 3;
-                            foreach (TSELayerStack component in textureComponent.Value.DisabledComponents)
+                            foreach (var component in textureComponent.Value.DisabledComponents)
                             {
                                 EditorGUILayout.ObjectField(component, typeof(TSELayerStack), true);
                             }
@@ -137,7 +137,7 @@ namespace net.puk06.TexStackEditor.Editor
                     EditorGUILayout.EndVertical();
                 }
 
-                List<TSELayerStack> missingTextureComponents = components
+                var missingTextureComponents = components
                     .Where(c => c.TargetTexture == null)
                     .ToList();
 
@@ -159,7 +159,7 @@ namespace net.puk06.TexStackEditor.Editor
                     if (_showMissing)
                     {
                         EditorGUI.indentLevel = 3;
-                        foreach (TSELayerStack component in missingTextureComponents)
+                        foreach (var component in missingTextureComponents)
                         {
                             EditorGUILayout.ObjectField(component, typeof(TSELayerStack), true);
                         }

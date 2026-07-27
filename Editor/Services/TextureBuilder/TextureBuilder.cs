@@ -15,9 +15,9 @@ namespace net.puk06.TexStackEditor.Editor.Services
             if (!parent.IsActiveTSEComponent()) return null;
             ExtendedRenderTexture? result = null;
 
-            foreach (TSELayerNode node in GetNodes(parent.transform))
+            foreach (var node in GetNodes(parent.transform))
             {
-                using ExtendedRenderTexture? layerTexture = BuildNode(node);
+                using var layerTexture = BuildNode(node);
                 if (layerTexture == null) continue;
 
                 using (layerTexture)
@@ -25,7 +25,7 @@ namespace net.puk06.TexStackEditor.Editor.Services
                     if (result == null && !ExtendedRenderTexture.TryCreate(layerTexture.width, layerTexture.height, out result))
                         return null;
 
-                    ExtendedRenderTexture? blendedTexture = Blend(result, layerTexture, node.LayerNodeConfiguration.Opacity, node.LayerNodeConfiguration.BlendMode);
+                    var blendedTexture = Blend(result, layerTexture, node.LayerNodeConfiguration.Opacity, node.LayerNodeConfiguration.BlendMode);
                     if (blendedTexture == null)
                     {
                         result.Dispose();
@@ -53,9 +53,9 @@ namespace net.puk06.TexStackEditor.Editor.Services
 
             ExtendedRenderTexture? layerProcessedTexture = null;
 
-            foreach (TSELayerNode node in GetNodes(folder.transform))
+            foreach (var node in GetNodes(folder.transform))
             {
-                ExtendedRenderTexture? layerTexture = BuildNode(node);
+                var layerTexture = BuildNode(node);
                 if (layerTexture == null) continue;
 
                 using (layerTexture)
@@ -65,7 +65,7 @@ namespace net.puk06.TexStackEditor.Editor.Services
 
                     if (layerProcessedTexture == null) return null;
 
-                    ExtendedRenderTexture? blendedTexture = Blend(layerProcessedTexture, layerTexture, node.LayerNodeConfiguration.Opacity, node.LayerNodeConfiguration.BlendMode);
+                    var blendedTexture = Blend(layerProcessedTexture, layerTexture, node.LayerNodeConfiguration.Opacity, node.LayerNodeConfiguration.BlendMode);
                     if (blendedTexture == null)
                     {
                         layerProcessedTexture.Dispose();
@@ -110,7 +110,7 @@ namespace net.puk06.TexStackEditor.Editor.Services
 
         private static ExtendedRenderTexture? Blend(RenderTexture baseTexture, RenderTexture layerTexture, float layerOpacity, LayerBlendMode layerBlendMode)
         {
-            ComputeShader? blenderShader = TSEShaderEngine.TextureBlenderComputeShader;
+            var blenderShader = TSEShaderEngine.TextureBlenderComputeShader;
             if (blenderShader == null) TSEShaderEngine.LoadShaders();
 
             if (blenderShader == null)
@@ -124,8 +124,8 @@ namespace net.puk06.TexStackEditor.Editor.Services
             int canvasWidth = Mathf.Max(baseTexture.width, layerTexture.width);
             int canvasHeight = Mathf.Max(baseTexture.height, layerTexture.height);
 
-            Vector2 baseScale = new((float)baseTexture.width / canvasWidth, (float)baseTexture.height / canvasHeight);
-            Vector2 layerScale = new((float)layerTexture.width / canvasWidth, (float)layerTexture.height / canvasHeight);
+            var baseScale = new Vector2((float)baseTexture.width / canvasWidth, (float)baseTexture.height / canvasHeight);
+            var layerScale = new Vector2((float)layerTexture.width / canvasWidth, (float)layerTexture.height / canvasHeight);
 
             if (!ExtendedRenderTexture.TryCreate(canvasWidth, canvasHeight, out ExtendedRenderTexture targetTexture))
                 return null;
@@ -150,7 +150,7 @@ namespace net.puk06.TexStackEditor.Editor.Services
         }
         private static ExtendedRenderTexture? Process(TSELayerNode node, RenderTexture sourceTexture)
         {
-            ComputeShader? processorShader = TSEShaderEngine.TextureProcessorComputeShader;
+            var processorShader = TSEShaderEngine.TextureProcessorComputeShader;
             if (processorShader == null) TSEShaderEngine.LoadShaders();
 
             if (processorShader == null)
@@ -174,7 +174,7 @@ namespace net.puk06.TexStackEditor.Editor.Services
 
             processorShader.SetTexture(kernel, "_MaskTex", (node.MaskConfiguration.IsEnabled && node.MaskConfiguration.MaskTexture != null) ? node.MaskConfiguration.MaskTexture : DummyRenderTexture.Instance);
             
-            Vector2 maskScale = node.MaskConfiguration.MaskTexture == null ? new() : new Vector2((float)node.MaskConfiguration.MaskTexture.width / sourceTexture.width, (float)node.MaskConfiguration.MaskTexture.height / sourceTexture.height);
+            var maskScale = node.MaskConfiguration.MaskTexture == null ? new() : new Vector2((float)node.MaskConfiguration.MaskTexture.width / sourceTexture.width, (float)node.MaskConfiguration.MaskTexture.height / sourceTexture.height);
             processorShader.SetVector("_MaskTexScale", maskScale);
             processorShader.SetInt("_MaskSelectionType", (int)node.MaskConfiguration.MaskSelectionType);
             processorShader.SetBool("_IsBackgroundTransparent", node.MaskConfiguration.MaskBlendSettings.IsBackgroundTransparent);
@@ -194,7 +194,7 @@ namespace net.puk06.TexStackEditor.Editor.Services
             processorShader.SetFloat("_V2Minimum", node.ColorAdjustmentConfiguration.V2ColorSettings.Minimum);
             processorShader.SetBool("_V2IncludeOutside", node.ColorAdjustmentConfiguration.V2ColorSettings.IncludeOutside);
 
-            Texture2D v3GradientTexture = node.ColorAdjustmentConfiguration.V3ColorSettings.Gradient.ToTexture(node.ColorAdjustmentConfiguration.V3ColorSettings.Resolution);
+            var v3GradientTexture = node.ColorAdjustmentConfiguration.V3ColorSettings.Gradient.ToTexture(node.ColorAdjustmentConfiguration.V3ColorSettings.Resolution);
             processorShader.SetTexture(kernel, "_V3Gradient", v3GradientTexture);
             processorShader.SetInt("_V3GradientWidth", node.ColorAdjustmentConfiguration.V3ColorSettings.Resolution);
 

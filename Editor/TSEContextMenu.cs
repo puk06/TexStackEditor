@@ -20,9 +20,9 @@ namespace net.puk06.TexStackEditor.Editor
         [MenuItem(MenuBasePath + "Layer Stack (Parent)/Main Texture", false, Pri)]
         private static void AddLayerStackWithTexture()
         {
-            Texture? mainTexture = GetMainTextureFromGameobject(Selection.activeGameObject);
+            var mainTexture = GetMainTextureFromGameobject(Selection.activeGameObject);
             
-            TSELayerStack stackComponent = AddGameObject<TSELayerStack>("[Parent] TSE LayerStack", Selection.activeGameObject);
+            var stackComponent = AddGameObject<TSELayerStack>("[Parent] TSE LayerStack", Selection.activeGameObject);
             if (mainTexture != null)
             {
                 stackComponent.TargetTexture = mainTexture as Texture2D;
@@ -48,15 +48,15 @@ namespace net.puk06.TexStackEditor.Editor
         [MenuItem(MenuBasePath + "Add Layer/Base Texture Layer", false, Pri + 4)]
         private static void AddBaseLayer()
         {
-            GameObject activeObject = Selection.activeGameObject;
-            TSELayerStack? stackComponent = activeObject.GetComponentInParent<TSELayerStack>(true);
+            var activeObject = Selection.activeGameObject;
+            var stackComponent = activeObject.GetComponentInParent<TSELayerStack>(true);
             if (stackComponent == null)
             {
                 Debug.LogError("TSELayerStackコンポーネントが見つかりませんでした");
                 return;
             }
 
-            TSETextureLayer layerComponent = AddGameObject<TSETextureLayer>("[Base Texture] TSE Texture Layer", Selection.activeGameObject);
+            var layerComponent = AddGameObject<TSETextureLayer>("[Base Texture] TSE Texture Layer", Selection.activeGameObject);
             layerComponent.LayerTexture = stackComponent.TargetTexture;
         }
 
@@ -64,17 +64,17 @@ namespace net.puk06.TexStackEditor.Editor
         [MenuItem(MenuBasePath + "Color Changer For Unity/Import from Color Changer for Unity (CC4U)", false, Pri + 5)]
         private static void CreateFromColorChangerForUnity()
         {
-            GameObject activeObject = Selection.activeGameObject;
-            ColorChangerForUnity? colorChangerComponent = activeObject.GetComponent<ColorChangerForUnity>();
+            var activeObject = Selection.activeGameObject;
+            var colorChangerComponent = activeObject.GetComponent<ColorChangerForUnity>();
             if (colorChangerComponent == null)
             {
                 Debug.LogError("ColorChangerForUnityコンポーネントが見つかりませんでした");
                 return;
             }
 
-            GameObject parentObject = colorChangerComponent.gameObject.transform.parent.gameObject;
+            var parentObject = colorChangerComponent.gameObject.transform.parent.gameObject;
 
-            TSELayerStack stackComponent = AddGameObject<TSELayerStack>($"[Parent] TSE {colorChangerComponent.name}", parentObject);
+            var stackComponent = AddGameObject<TSELayerStack>($"[Parent] TSE {colorChangerComponent.name}", parentObject);
             
             Texture2D? replacementTexture = null;
             Texture2D? targetTexture = null;
@@ -91,17 +91,17 @@ namespace net.puk06.TexStackEditor.Editor
     
             stackComponent.TargetTexture = targetTexture;
 
-            TSELayerFolder layerFolderComponent = AddGameObject<TSELayerFolder>($"[Layer Folder (From CC4U)] {colorChangerComponent.name}", stackComponent.gameObject);
+            var layerFolderComponent = AddGameObject<TSELayerFolder>($"[Layer Folder (From CC4U)] {colorChangerComponent.name}", stackComponent.gameObject);
 
             if (replacementTexture != null)
             {
-                TSETextureLayer component = AddGameObject<TSETextureLayer>($"[Replacement Texture] {replacementTexture.name}", layerFolderComponent.gameObject);
+                var component = AddGameObject<TSETextureLayer>($"[Replacement Texture] {replacementTexture.name}", layerFolderComponent.gameObject);
                 component.LayerTexture = replacementTexture;
             }
 
             if (targetTexture != null)
             {
-                TSETextureLayer component = AddGameObject<TSETextureLayer>($"[Base Texture] {targetTexture.name}", layerFolderComponent.gameObject);
+                var component = AddGameObject<TSETextureLayer>($"[Base Texture] {targetTexture.name}", layerFolderComponent.gameObject);
                 component.LayerTexture = targetTexture;
             }
 
@@ -111,15 +111,15 @@ namespace net.puk06.TexStackEditor.Editor
         [MenuItem(MenuBasePath + "Color Changer For Unity/Convert to Texture Layer", false, Pri + 6)]
         private static void ConvertToTextureLayer()
         {
-            GameObject activeObject = Selection.activeGameObject;
-            ColorChangerForUnity? colorChangerComponent = activeObject.GetComponent<ColorChangerForUnity>();
+            var activeObject = Selection.activeGameObject;
+            var colorChangerComponent = activeObject.GetComponent<ColorChangerForUnity>();
             if (colorChangerComponent == null)
             {
                 Debug.LogError("ColorChangerForUnityコンポーネントが見つかりませんでした");
                 return;
             }
 
-            GameObject parentObject = colorChangerComponent.gameObject.transform.parent.gameObject;
+            var parentObject = colorChangerComponent.gameObject.transform.parent.gameObject;
 
             TSETextureLayer? targetTextureComponent = null;
 
@@ -138,14 +138,14 @@ namespace net.puk06.TexStackEditor.Editor
     
             if (replacementTexture != null)
             {
-                TSETextureLayer component = AddGameObject<TSETextureLayer>($"[Replacement Texture] {replacementTexture.name}", parentObject);
+                var component = AddGameObject<TSETextureLayer>($"[Replacement Texture] {replacementTexture.name}", parentObject);
                 component.LayerTexture = replacementTexture;
                 targetTextureComponent = component;
             }
 
             if (targetTexture != null)
             {
-                TSETextureLayer component = AddGameObject<TSETextureLayer>($"[Base Texture] {targetTexture.name}", parentObject);
+                var component = AddGameObject<TSETextureLayer>($"[Base Texture] {targetTexture.name}", parentObject);
                 component.LayerTexture = targetTexture;
                 if (targetTextureComponent == null) targetTextureComponent = component;
             }
@@ -241,7 +241,7 @@ namespace net.puk06.TexStackEditor.Editor
         private static T AddGameObject<T>(string objectName, GameObject? parentObject = null)
             where T: Component
         {
-            GameObject tseObject = new(objectName);
+            var tseObject = new GameObject(objectName);
             if (parentObject != null) tseObject.transform.SetParent(parentObject.transform);
 
             T component = Undo.AddComponent<T>(tseObject);
@@ -256,16 +256,16 @@ namespace net.puk06.TexStackEditor.Editor
         {
             if (gameObject == null) return null;
 
-            Renderer[] renderers = gameObject.GetComponents<Renderer>();
+            var renderers = gameObject.GetComponents<Renderer>();
             if (renderers == null || renderers.Length == 0) return null;
 
-            Renderer renderer = renderers.FirstOrDefault();
+            var renderer = renderers.FirstOrDefault();
             if (renderer == null) return null;
 
-            Material[] materials = renderer.sharedMaterials;
+            var materials = renderer.sharedMaterials;
             if (materials == null || materials.Length == 0) return null;
 
-            Material mainMaterial = materials.FirstOrDefault();
+            var mainMaterial = materials.FirstOrDefault();
             if (mainMaterial == null) return null;
 
             return mainMaterial.mainTexture;

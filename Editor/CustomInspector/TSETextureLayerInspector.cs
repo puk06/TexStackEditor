@@ -30,7 +30,7 @@ namespace net.puk06.TexStackEditor.Editor
 
             EditorGUI.indentLevel = 1;
 
-            SerializedProperty layerTextureProperty = serializedObject.FindProperty("LayerTexture");
+            var layerTextureProperty = serializedObject.FindProperty("LayerTexture");
             layerTextureProperty.objectReferenceValue = (Texture2D)EditorGUILayout.ObjectField(LocalizationUtils.Localize("Inspector.TextureLayer.Component.LayerTexture"), (Texture2D)layerTextureProperty.objectReferenceValue, typeof(Texture2D), true);
         
             EditorGUI.indentLevel = 0;

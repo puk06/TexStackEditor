@@ -11,7 +11,7 @@ namespace net.puk06.TexStackEditor.Editor
     {
         public override ExtendedRenderTexture? GeneratePreview()
         {
-            TSELayerNode? component = target as TSELayerNode;
+            var component = target as TSELayerNode;
             if (component == null) return null;
 
             return TextureBuilder.BuildNode(component);
@@ -38,7 +38,7 @@ namespace net.puk06.TexStackEditor.Editor
 
             EditorGUI.indentLevel = 1;
             
-            SerializedProperty LayerNodeConfigurationProp = serializedObject.FindProperty("LayerNodeConfiguration");
+            var LayerNodeConfigurationProp = serializedObject.FindProperty("LayerNodeConfiguration");
 
             EditorGUILayout.PropertyField(LayerNodeConfigurationProp.FindPropertyRelative("IsVisible"), new GUIContent(LocalizationUtils.Localize("Inspector.LayerNode.Component.IsVisible")));
 
@@ -47,7 +47,7 @@ namespace net.puk06.TexStackEditor.Editor
                 EditorGUI.indentLevel = 2;
 
                 EditorGUILayout.PropertyField(LayerNodeConfigurationProp.FindPropertyRelative("Opacity"), new GUIContent(LocalizationUtils.Localize("Inspector.LayerNode.Component.Opacity")));
-                SerializedProperty blendModeProperty = LayerNodeConfigurationProp.FindPropertyRelative("BlendMode");
+                var blendModeProperty = LayerNodeConfigurationProp.FindPropertyRelative("BlendMode");
 
                 string[] blendModeLabels =
                 {
@@ -78,7 +78,7 @@ namespace net.puk06.TexStackEditor.Editor
 
             EditorGUI.indentLevel = 1;
             
-            SerializedProperty MaskConfigurationProp = serializedObject.FindProperty("MaskConfiguration");
+            var MaskConfigurationProp = serializedObject.FindProperty("MaskConfiguration");
 
             EditorGUILayout.PropertyField(MaskConfigurationProp.FindPropertyRelative("IsEnabled"), new GUIContent(LocalizationUtils.Localize("Inspector.LayerNode.Component.IsEnabled")));
 
@@ -86,10 +86,10 @@ namespace net.puk06.TexStackEditor.Editor
             {
                 EditorGUI.indentLevel = 2;
 
-                SerializedProperty maskTextureProperty = MaskConfigurationProp.FindPropertyRelative("MaskTexture");
+                var maskTextureProperty = MaskConfigurationProp.FindPropertyRelative("MaskTexture");
                 maskTextureProperty.objectReferenceValue = (Texture2D)EditorGUILayout.ObjectField(LocalizationUtils.Localize("Inspector.LayerNode.Component.MaskTexture"), (Texture2D)maskTextureProperty.objectReferenceValue, typeof(Texture2D), true);
 
-                SerializedProperty maskSelectionTypeProperty = MaskConfigurationProp.FindPropertyRelative("MaskSelectionType");
+                var maskSelectionTypeProperty = MaskConfigurationProp.FindPropertyRelative("MaskSelectionType");
                 
                 string[] maskSelectionTypeLabels =
                 {
@@ -103,7 +103,7 @@ namespace net.puk06.TexStackEditor.Editor
 
                 maskSelectionTypeProperty.enumValueIndex = EditorGUILayout.Popup(LocalizationUtils.Localize("Inspector.LayerNode.Component.MaskSelectionType"), maskSelectionTypeProperty.enumValueIndex, maskSelectionTypeLabels);
 
-                SerializedProperty maskBlendSettingsProperty = MaskConfigurationProp.FindPropertyRelative("MaskBlendSettings");
+                var maskBlendSettingsProperty = MaskConfigurationProp.FindPropertyRelative("MaskBlendSettings");
                 EditorGUILayout.PropertyField(maskBlendSettingsProperty.FindPropertyRelative("IsBackgroundTransparent"), new GUIContent(LocalizationUtils.Localize("Inspector.LayerNode.Component.MaskBlendSettings.IsBackgroundTransparent")));
 
                 EditorGUI.indentLevel = 1;
@@ -120,7 +120,7 @@ namespace net.puk06.TexStackEditor.Editor
 
             EditorGUI.indentLevel = 1;
             
-            SerializedProperty ColorAdjustmentConfigurationProp = serializedObject.FindProperty("ColorAdjustmentConfiguration");
+            var ColorAdjustmentConfigurationProp = serializedObject.FindProperty("ColorAdjustmentConfiguration");
 
             EditorGUILayout.PropertyField(ColorAdjustmentConfigurationProp.FindPropertyRelative("IsEnabled"), new GUIContent(LocalizationUtils.Localize("Inspector.LayerNode.Component.ColorAdjustmentConfiguration.IsEnabled")));
 
@@ -136,10 +136,10 @@ namespace net.puk06.TexStackEditor.Editor
                     LocalizationUtils.Localize("Inspector.LayerNode.Component.ColorAdjustmentConfiguration.Mode.Options.V3"),
                 };
                 
-                SerializedProperty modeProperty = ColorAdjustmentConfigurationProp.FindPropertyRelative("Mode");
+                var modeProperty = ColorAdjustmentConfigurationProp.FindPropertyRelative("Mode");
                 modeProperty.enumValueIndex = EditorGUILayout.Popup(LocalizationUtils.Localize("Inspector.LayerNode.Component.ColorAdjustmentConfiguration.Mode"), modeProperty.enumValueIndex, colorAdjustmentModeLabels);
 
-                SerializedProperty normalColorSetingsProperty = ColorAdjustmentConfigurationProp.FindPropertyRelative("NormalColorSettings");
+                var normalColorSetingsProperty = ColorAdjustmentConfigurationProp.FindPropertyRelative("NormalColorSettings");
 
                 switch (modeProperty.enumValueIndex)
                 {
@@ -153,7 +153,7 @@ namespace net.puk06.TexStackEditor.Editor
                     case 1:
                         {
                             EditorGUILayout.HelpBox(LocalizationUtils.Localize("Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V1.Description"), MessageType.Info);
-                            SerializedProperty v1ColorSetingsProperty = ColorAdjustmentConfigurationProp.FindPropertyRelative("V1ColorSettings");
+                            var v1ColorSetingsProperty = ColorAdjustmentConfigurationProp.FindPropertyRelative("V1ColorSettings");
                             EditorGUILayout.PropertyField(normalColorSetingsProperty.FindPropertyRelative("SourceColor"), new GUIContent(LocalizationUtils.Localize("Inspector.LayerNode.Component.ColorAdjustmentConfiguration.Normal.SourceColor")));
                             EditorGUILayout.PropertyField(normalColorSetingsProperty.FindPropertyRelative("TargetColor"), new GUIContent(LocalizationUtils.Localize("Inspector.LayerNode.Component.ColorAdjustmentConfiguration.Normal.TargetColor")));
                             EditorGUILayout.PropertyField(v1ColorSetingsProperty.FindPropertyRelative("Weight"), new GUIContent(LocalizationUtils.Localize("Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V1.Weight")));
@@ -164,7 +164,7 @@ namespace net.puk06.TexStackEditor.Editor
                     case 2:
                         {
                             EditorGUILayout.HelpBox(LocalizationUtils.Localize("Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V2.Description"), MessageType.Info);
-                            SerializedProperty v2ColorSetingsProperty = ColorAdjustmentConfigurationProp.FindPropertyRelative("V2ColorSettings");
+                            var v2ColorSetingsProperty = ColorAdjustmentConfigurationProp.FindPropertyRelative("V2ColorSettings");
                             EditorGUILayout.PropertyField(normalColorSetingsProperty.FindPropertyRelative("SourceColor"), new GUIContent(LocalizationUtils.Localize("Inspector.LayerNode.Component.ColorAdjustmentConfiguration.Normal.SourceColor")));
                             EditorGUILayout.PropertyField(normalColorSetingsProperty.FindPropertyRelative("TargetColor"), new GUIContent(LocalizationUtils.Localize("Inspector.LayerNode.Component.ColorAdjustmentConfiguration.Normal.TargetColor")));
                             EditorGUILayout.PropertyField(v2ColorSetingsProperty.FindPropertyRelative("Weight"), new GUIContent(LocalizationUtils.Localize("Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V2.Weight")));
@@ -177,7 +177,7 @@ namespace net.puk06.TexStackEditor.Editor
                     case 3:
                         {
                             EditorGUILayout.HelpBox(LocalizationUtils.Localize("Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V3.Description"), MessageType.Info);
-                            SerializedProperty v3ColorSetingsProperty = ColorAdjustmentConfigurationProp.FindPropertyRelative("V3ColorSettings");
+                            var v3ColorSetingsProperty = ColorAdjustmentConfigurationProp.FindPropertyRelative("V3ColorSettings");
                             EditorGUILayout.PropertyField(v3ColorSetingsProperty.FindPropertyRelative("Gradient"), new GUIContent(LocalizationUtils.Localize("Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V3.Gradient")));
                             EditorGUILayout.PropertyField(v3ColorSetingsProperty.FindPropertyRelative("Resolution"), new GUIContent(LocalizationUtils.Localize("Inspector.LayerNode.Component.ColorAdjustmentConfiguration.V3.Resolution")));
                             break;
@@ -198,7 +198,7 @@ namespace net.puk06.TexStackEditor.Editor
 
             EditorGUI.indentLevel = 1;
             
-            SerializedProperty AdvancedColorConfigurationProp = serializedObject.FindProperty("AdvancedColorConfiguration");
+            var AdvancedColorConfigurationProp = serializedObject.FindProperty("AdvancedColorConfiguration");
 
             EditorGUILayout.PropertyField(AdvancedColorConfigurationProp.FindPropertyRelative("IsEnabled"), new GUIContent(LocalizationUtils.Localize("Inspector.LayerNode.Component.AdvancedColorConfiguration.IsEnabled")));
 

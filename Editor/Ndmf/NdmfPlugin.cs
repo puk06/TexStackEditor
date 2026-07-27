@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using nadena.dev.ndmf;
 using nadena.dev.ndmf.util;
-using net.puk06.TexStackEditor.Editor.Models;
 using net.puk06.TexStackEditor.Editor.Ndmf;
 using UnityEngine;
 
@@ -38,10 +37,10 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
     {
         protected override void Execute(BuildContext context)
         {
-            GameObject avatar = context.AvatarRootObject;
-            TSELayerStack[] components = avatar.GetComponentsInChildren<TSELayerStack>(false);
+            var avatar = context.AvatarRootObject;
+            var components = avatar.GetComponentsInChildren<TSELayerStack>(false);
 
-            Dictionary<Texture2D, ExtendedRenderTexture> processedTexturesDictionary = NdmfProcessor.ProcessAllComponents(components,
+            var processedTexturesDictionary = NdmfProcessor.ProcessAllComponents(components,
                 onSuccess: component =>
                 {
                     string textureName = component.TargetTexture == null ? "Unknown Texture" : component.TargetTexture.name;
@@ -53,7 +52,7 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
                     ErrorReport.ReportError(NdmfLocalizer.Localizer, ErrorSeverity.NonFatal, "NdmfBuild.Processing.Failed", component.AvatarRootPath(), textureName);
                 }
             );
-            IEnumerable<Renderer> renderers = avatar.GetComponentsInChildren<Renderer>(true).Where(r => r is MeshRenderer or SkinnedMeshRenderer);
+            var renderers = avatar.GetComponentsInChildren<Renderer>(true).Where(r => r is MeshRenderer or SkinnedMeshRenderer);
             NdmfProcessor.ReplaceTexturesInRenderers(renderers, NdmfProcessor.ConvertToTexture2DDictionary(processedTexturesDictionary));
         }
     }
@@ -62,9 +61,9 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
     {
         protected override void Execute(BuildContext context)
         {
-            GameObject avatar = context.AvatarRootObject;
-            TSELayerStack[] components = avatar.GetComponentsInChildren<TSELayerStack>(true);
-            TSELayerNode[] childComponents = avatar.GetComponentsInChildren<TSELayerNode>(true);
+            var avatar = context.AvatarRootObject;
+            var components = avatar.GetComponentsInChildren<TSELayerStack>(true);
+            var childComponents = avatar.GetComponentsInChildren<TSELayerNode>(true);
 
             RemoveAllComponents(components);
             RemoveAllComponents(childComponents);

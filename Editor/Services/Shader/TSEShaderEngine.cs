@@ -22,7 +22,7 @@ namespace net.puk06.TexStackEditor.Editor.Services
 
         private static ComputeShader? Load(string guid)
         {
-            string path = AssetDatabase.GUIDToAssetPath(guid);
+            var path = AssetDatabase.GUIDToAssetPath(guid);
             return AssetDatabase.LoadAssetAtPath<ComputeShader>(path);
         }
     }

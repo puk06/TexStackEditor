@@ -12,7 +12,7 @@ namespace net.puk06.TexStackEditor.Editor
     {
         public override ExtendedRenderTexture? GeneratePreview()
         {
-            TSELayerStack? component = target as TSELayerStack;
+            var component = target as TSELayerStack;
             if (component == null || component.TargetTexture == null) return null;
             
             return TextureBuilder.Build(component);
@@ -40,7 +40,7 @@ namespace net.puk06.TexStackEditor.Editor
 
             EditorGUI.indentLevel = 1;
 
-            SerializedProperty targetTextureProperty = serializedObject.FindProperty("TargetTexture");
+            var targetTextureProperty = serializedObject.FindProperty("TargetTexture");
             targetTextureProperty.objectReferenceValue = (Texture2D)EditorGUILayout.ObjectField(LocalizationUtils.Localize("Inspector.Stack.Component.TargetTexture"), (Texture2D)targetTextureProperty.objectReferenceValue, typeof(Texture2D), true);
         
             EditorGUI.indentLevel = 0;
@@ -52,17 +52,17 @@ namespace net.puk06.TexStackEditor.Editor
         {
             if (GUILayout.Button(LocalizationUtils.Localize("Inspector.Stack.Button.OutputTexture")))
             {
-                TSELayerStack? component = target as TSELayerStack;
+                var component = target as TSELayerStack;
                 if (component == null) return;
 
-                ExtendedRenderTexture? outputTexture = TextureBuilder.Build(component);
+                var outputTexture = TextureBuilder.Build(component);
                 if (outputTexture != null)
                 {
-                    string path = EditorUtility.SaveFilePanel(LocalizationUtils.Localize("Inspector.Stack.SaveTextureDialog.Title"), Application.dataPath, "OutputTexture.png", "png");
+                    var path = EditorUtility.SaveFilePanel(LocalizationUtils.Localize("Inspector.Stack.SaveTextureDialog.Title"), Application.dataPath, "OutputTexture.png", "png");
                     if (!string.IsNullOrEmpty(path))
                     {
-                        Texture2D outputTexture2D = outputTexture.ToTexture2D();
-                        byte[] pngData = outputTexture2D.EncodeToPNG();
+                        var outputTexture2D = outputTexture.ToTexture2D();
+                        var pngData = outputTexture2D.EncodeToPNG();
                         System.IO.File.WriteAllBytes(path, pngData);
                         AssetDatabase.Refresh();
                     }
