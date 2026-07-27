@@ -65,7 +65,9 @@ namespace net.puk06.TexStackEditor.Editor
                         var pngData = outputTexture2D.EncodeToPNG();
                         System.IO.File.WriteAllBytes(path, pngData);
                         AssetDatabase.Refresh();
+                        DestroyImmediate(outputTexture2D);
                     }
+                    outputTexture.Dispose();
                 }
             }
         }

@@ -52,8 +52,12 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
                     ErrorReport.ReportError(NdmfLocalizer.Localizer, ErrorSeverity.NonFatal, "NdmfBuild.Processing.Failed", component.AvatarRootPath(), textureName);
                 }
             );
+            var texture2DDictionary = NdmfProcessor.ConvertToTexture2DDictionary(processedTexturesDictionary);
             var renderers = avatar.GetComponentsInChildren<Renderer>(true).Where(r => r is MeshRenderer or SkinnedMeshRenderer);
-            NdmfProcessor.ReplaceTexturesInRenderers(renderers, NdmfProcessor.ConvertToTexture2DDictionary(processedTexturesDictionary));
+            NdmfProcessor.ReplaceTexturesInRenderers(renderers, texture2DDictionary);
+
+            foreach (var texture in texture2DDictionary.Values)
+                context.AssetSaver.SaveAsset(texture);
         }
     }
 
