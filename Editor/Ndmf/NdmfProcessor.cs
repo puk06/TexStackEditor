@@ -14,9 +14,9 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
     {
         internal static Dictionary<Texture2D, ExtendedRenderTexture> ProcessAllComponents(IEnumerable<TSELayerStack> components, Action<TSELayerStack>? onSuccess = null, Action<TSELayerStack>? onFailed = null)
         {
-            Dictionary<Texture2D, ExtendedRenderTexture> result = new();
+            var result = new Dictionary<Texture2D, ExtendedRenderTexture>();
 
-            foreach (TSELayerStack component in components)
+            foreach (var component in components)
             {
                 if (component.TargetTexture == null || result.ContainsKey(component.TargetTexture))
                 {
@@ -24,7 +24,7 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
                     continue;
                 }
 
-                ExtendedRenderTexture? processedRenderTexture = TextureBuilder.Build(component);
+                var processedRenderTexture = TextureBuilder.Build(component);
                 if (processedRenderTexture == null)
                 {
                     onFailed?.Invoke(component);
@@ -40,11 +40,11 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
 
         internal static Dictionary<Texture2D, Texture2D> ConvertToTexture2DDictionary(Dictionary<Texture2D, ExtendedRenderTexture> processedTexturesDictionary)
         {
-            Dictionary<Texture2D, Texture2D> result = new();
+            var result = new Dictionary<Texture2D, Texture2D>();
 
-            foreach (KeyValuePair<Texture2D, ExtendedRenderTexture> processedKpv in processedTexturesDictionary)
+            foreach (var processedKpv in processedTexturesDictionary)
             {
-                Texture2D convertedTexture = processedKpv.Value.ToTexture2D();
+                var convertedTexture = processedKpv.Value.ToTexture2D();
                 processedKpv.Value.Dispose();
 
                 result.Add(processedKpv.Key, convertedTexture);
@@ -55,11 +55,14 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
 
         internal static void ReplaceTexturesInRenderers(IEnumerable<Renderer> renderers, Dictionary<Texture2D, Texture2D> processedTexturesDictionary)
         {
+            if (processedTexturesDictionary.Count == 0) return;
+
             Dictionary<Material, Material> materialMap = new();
             
             foreach (Renderer renderer in renderers)
             {
                 Material?[] materials = renderer.sharedMaterials;
+                bool changed = false;
 
                 foreach (ref Material? material in materials.AsSpan())
                 {
@@ -67,18 +70,21 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
                     if (materialMap.TryGetValue(material, out Material? cloned))
                     {
                         material = cloned;
+                        changed = true;
                     }
                     else
                     {
-                        Material newMaterial = GetProcessedMaterial(material, processedTexturesDictionary);
+                        var newMaterial = GetProcessedMaterial(material, processedTexturesDictionary);
+                        if (newMaterial == material) continue;
 
-                        ObjectRegistry.RegisterReplacedObject(material, newMaterial);
-                        materialMap.Add(material, newMaterial);
+                        ObjectRegistry.RegisterReplacedObject(material, newMaterial!);
+                        materialMap.Add(material, newMaterial!);
                         material = newMaterial;
+                        changed = true;
                     }
                 }
 
-                renderer.sharedMaterials = materials;
+                if (changed) renderer.sharedMaterials = materials;
             }
         }
 
@@ -88,15 +94,17 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
         {
             if (material == null) return null;
 
-            Material newMaterial = UnityEngine.Object.Instantiate(material);
+            Material? newMaterial = null;
 
-            newMaterial.ForEachTexture((texture, propName) =>
+            material.ForEachTexture((texture, propName) =>
             {
                 if (texture is not Texture2D originalTexture || !processedTextures.TryGetValue(originalTexture, out T processedTexture)) return;
+                if (newMaterial == null) newMaterial = UnityEngine.Object.Instantiate(material);
                 newMaterial.SetTexture(propName, processedTexture);
             });
 
-            return newMaterial;
+            if (newMaterial != null) return newMaterial;
+            return material;
         }
     }
 }

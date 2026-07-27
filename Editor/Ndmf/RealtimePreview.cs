@@ -4,10 +4,8 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
-using nadena.dev.ndmf;
 using nadena.dev.ndmf.preview;
 using net.puk06.TexStackEditor.Editor.Extension;
-using net.puk06.TexStackEditor.Editor.Models;
 using net.puk06.TexStackEditor.Editor.Utils;
 using UnityEditor;
 using UnityEngine;
@@ -19,18 +17,18 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
     {
         public ImmutableList<RenderGroup> GetTargetGroups(ComputeContext context)
         {
-            IEnumerable<GameObject> avatarGameObjects = context.GetAvatarRoots().Distinct();
+            var avatarGameObjects = context.GetAvatarRoots().Distinct();
 
-            List<RenderGroup> targetRenderGroups = new();
+            var targetRenderGroups = new List<RenderGroup>();
 
-            foreach (GameObject avatarGameObject in avatarGameObjects)
+            foreach (var avatarGameObject in avatarGameObjects)
             {
                 try
                 {
-                    TSELayerStack[] parentComponents = context.GetComponentsInChildren<TSELayerStack>(avatarGameObject, true);
+                    var parentComponents = context.GetComponentsInChildren<TSELayerStack>(avatarGameObject, true);
                     if (parentComponents.Length == 0) continue;
 
-                    foreach (TSELayerStack parentComponent in parentComponents)
+                    foreach (var parentComponent in parentComponents)
                     {
                         context.Observe(parentComponent, c => c.TargetTexture, (a, b) => a == b);
                         context.ActiveInHierarchy(parentComponent.gameObject);
@@ -39,14 +37,14 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
 
                     context.GetComponentsInChildren<TSELayerNode>(avatarGameObject, true);
 
-                    IEnumerable<Texture2D?> targetTextures = parentComponents
+                    var targetTextures = parentComponents
                         .Select(c => c.TargetTexture)
                         .Distinct();
 
-                    List<Renderer> targetRenderers = new();
+                    var targetRenderers = new List<Renderer>();
                     foreach (Renderer avatarRenderer in context.GetComponentsInChildren<Renderer>(avatarGameObject, true).Where(r => r is MeshRenderer or SkinnedMeshRenderer))
                     {
-                        Material[] materials = context.Observe(avatarRenderer, i => i.sharedMaterials, (a, b) => a != null && b != null && a.SequenceEqual(b));
+                        var materials = context.Observe(avatarRenderer, i => i.sharedMaterials, (a, b) => a != null && b != null && a.SequenceEqual(b));
                         if (materials == null) continue;
 
                         if (materials.Any(material => targetTextures.Any(targetTexture => targetTexture != null && material.HasTexture(targetTexture))))
@@ -73,43 +71,69 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
         {
             Dictionary<Texture2D, Texture2D>? processedTexturesDictionary = null;
             Dictionary<Renderer, Material?[]>? processedMaterialDictionary = new();
+            Dictionary<Material, Material>? materialMap = null;
 
             try
             {
-                GameObject root = group.GetData<GameObject>();
+                var root = group.GetData<GameObject>();
 
-                TSELayerStack[] parentComponents = root.GetComponentsInChildren<TSELayerStack>(true);
+                var parentComponents = root.GetComponentsInChildren<TSELayerStack>(true);
                 if (parentComponents.Length == 0) return Task.FromResult<IRenderFilterNode>(new EmptyNode());
 
-                IEnumerable<TSELayerNode> childNodeComponents = context.GetComponentsInChildren<TSELayerNode>(root, true);
-                foreach (TSELayerNode childNodeComponent in childNodeComponents)
+                var childNodeComponents = context.GetComponentsInChildren<TSELayerNode>(root, true);
+                foreach (var childNodeComponent in childNodeComponents)
                 {
                     context.Observe(childNodeComponent);
                     context.ActiveInHierarchy(childNodeComponent.gameObject);
                     context.Observe(childNodeComponent.gameObject, go => go.tag);
                 }
 
-                Dictionary<Texture2D, ExtendedRenderTexture> processedTextures = NdmfProcessor.ProcessAllComponents(parentComponents);
+                var processedTextures = NdmfProcessor.ProcessAllComponents(parentComponents);
                 processedTexturesDictionary = NdmfProcessor.ConvertToTexture2DDictionary(processedTextures);
                 ObjectReferenceService.RegisterReplacements(processedTexturesDictionary);
 
+                materialMap = new();
+
                 foreach ((Renderer original, Renderer proxy) in proxyPairs)
                 {
-                    processedMaterialDictionary[original] = proxy.sharedMaterials.Select(mat => {
-                        Material? newMaterial = NdmfProcessor.GetProcessedMaterial(mat, processedTexturesDictionary);
-                        if (mat != null && newMaterial != null) ObjectRegistry.RegisterReplacedObject(mat, newMaterial);
-                        return newMaterial;
-                    }).ToArray();
+                    Material?[] materials = proxy.sharedMaterials;
+                    Material?[] newMaterials = (Material?[])materials.Clone();
+                    bool changed = false;
+
+                    for (int i = 0; i < materials.Length; i++)
+                    {
+                        var material = materials[i];
+                        if (material == null) continue;
+
+                        if (materialMap.TryGetValue(material, out var cached))
+                        {
+                            newMaterials[i] = cached;
+                            changed = true;
+                        }
+                        else
+                        {
+                            var processed = NdmfProcessor.GetProcessedMaterial(materials[i], processedTexturesDictionary);
+                            if (processed != material)
+                            {
+                                materialMap.Add(material, processed!);
+                                newMaterials[i] = processed;
+                                changed = true;
+                            }
+                        }
+                    }
+
+                    if (changed)
+                        processedMaterialDictionary[original] = newMaterials;
                 }
-                
-                return Task.FromResult<IRenderFilterNode>(new TextureReplacerNode(processedMaterialDictionary, processedTexturesDictionary.Values));
+
+                return Task.FromResult<IRenderFilterNode>(new TextureReplacerNode(processedMaterialDictionary, processedTexturesDictionary.Values, materialMap.Values));
             }
             catch (Exception ex)
             {
                 LogUtils.LogError($"Failed to instantiate.\n{ex}");
                 if (processedTexturesDictionary != null)
                 {
-                    foreach (Texture2D texture in processedTexturesDictionary.Values)
+                    foreach (var texture in processedTexturesDictionary.Values)
                         Object.DestroyImmediate(texture);
                     processedTexturesDictionary.Clear();
                     processedTexturesDictionary = null;
@@ -117,9 +141,11 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
 
                 if (processedMaterialDictionary != null)
                 {
-                    foreach (Material?[] materials in processedMaterialDictionary.Values)
-                        foreach (Material? material in materials)
-                            if (material != null) Object.DestroyImmediate(material);
+                    if (materialMap != null)
+                    {
+                        foreach (var material in materialMap.Values)
+                            Object.DestroyImmediate(material);
+                    }
                     processedMaterialDictionary.Clear();
                     processedMaterialDictionary = null;
                 }
@@ -132,13 +158,15 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
         {
             private IEnumerable<Texture2D>? _processedTextures;
             private Dictionary<Renderer, Material?[]>? _processedMaterialDictionary;
+            private IEnumerable<Material>? _createdMaterials;
 
             public RenderAspects WhatChanged { get; private set; } = RenderAspects.Texture | RenderAspects.Material;
 
-            public TextureReplacerNode(Dictionary<Renderer, Material?[]>? processedMaterialDictionary, IEnumerable<Texture2D>? processedTexturesDictionary)
+            public TextureReplacerNode(Dictionary<Renderer, Material?[]>? processedMaterialDictionary, IEnumerable<Texture2D>? processedTextures, IEnumerable<Material>? createdMaterials)
             {
                 _processedMaterialDictionary = processedMaterialDictionary;
-                _processedTextures = processedTexturesDictionary;
+                _processedTextures = processedTextures;
+                _createdMaterials = createdMaterials;
             }
 
             public void OnFrame(Renderer original, Renderer proxy)
@@ -160,16 +188,20 @@ namespace net.puk06.TexStackEditor.Editor.Ndmf
             {
                 if (_processedTextures != null)
                 {
-                    foreach (Texture2D texture in _processedTextures)
+                    foreach (var texture in _processedTextures)
                         Object.DestroyImmediate(texture);
                     _processedTextures = null;
                 }
 
+                if (_createdMaterials != null)
+                {
+                    foreach (var material in _createdMaterials)
+                        Object.DestroyImmediate(material);
+                    _createdMaterials = null;
+                }
+
                 if (_processedMaterialDictionary != null)
                 {
-                    foreach (Material?[] materials in _processedMaterialDictionary.Values)
-                        foreach (Material? material in materials)
-                            if (material != null) Object.DestroyImmediate(material);
                     _processedMaterialDictionary.Clear();
                     _processedMaterialDictionary = null;
                 }
