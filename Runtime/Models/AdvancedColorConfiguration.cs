@@ -48,7 +48,7 @@ namespace net.puk06.TexStackEditor.Models
 
         public static float ConvertLegacyStrengthToCurrent(float legacyValue)
         {
-            return 1f + legacyValue / 100f;
+            return 1f + (legacyValue / 100f);
         }
     }
 }

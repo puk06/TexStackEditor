@@ -4,7 +4,6 @@ using UnityEngine;
 using net.puk06.TexStackEditor.Models;
 using System.Linq;
 
-
 #if COLOR_CHANGER_FOR_UNITY
 using net.puk06.ColorChanger;
 #endif

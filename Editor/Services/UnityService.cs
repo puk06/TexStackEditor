@@ -44,7 +44,7 @@ namespace net.puk06.TexStackEditor.Editor.Services
             var titleSize = style.CalcSize(new GUIContent(title));
 
             float lineX = rect.x + titleSize.x + 8f;
-            float lineY = rect.y + rect.height / 2f;
+            float lineY = rect.y + (rect.height / 2f);
 
             EditorGUI.DrawRect(
                 new Rect(lineX, lineY, rect.width - titleSize.x - 10f, lineThickness),
