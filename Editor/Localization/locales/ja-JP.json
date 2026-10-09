@@ -28,6 +28,11 @@
     "Inspector.LayerNode.Component.CompositePosition": "合成位置",
     "Inspector.LayerNode.Component.CompositeScale": "合成スケール",
     "Inspector.LayerNode.Component.CompositeRotation": "合成回転",
+
+    "Inspector.Preview.Label": "プレビュー",
+    "Inspector.Preview.LayerLabel": "レイヤー",
+    "Inspector.Preview.ParentLabel": "親",
+
     "Inspector.LayerNode.Component.BlendMode.Options.Normal": "通常",
     "Inspector.LayerNode.Component.BlendMode.Options.Multiply": "乗算",
     "Inspector.LayerNode.Component.BlendMode.Options.Screen": "スクリーン",
