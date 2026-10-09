@@ -76,6 +76,7 @@ namespace net.puk06.TexStackEditor.Editor
 
                 EditorGUILayout.PropertyField(LayerNodeConfigurationProp.FindPropertyRelative("CompositePosition"), new GUIContent(LocalizationUtils.Localize("Inspector.LayerNode.Component.CompositePosition")));
                 EditorGUILayout.PropertyField(LayerNodeConfigurationProp.FindPropertyRelative("CompositeScale"), new GUIContent(LocalizationUtils.Localize("Inspector.LayerNode.Component.CompositeScale")));
+                EditorGUILayout.PropertyField(LayerNodeConfigurationProp.FindPropertyRelative("CompositeRotation"), new GUIContent(LocalizationUtils.Localize("Inspector.LayerNode.Component.CompositeRotation")));
                 
                 EditorGUI.indentLevel = 1;
             }

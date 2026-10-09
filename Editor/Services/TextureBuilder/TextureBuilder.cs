@@ -142,8 +142,9 @@ namespace net.puk06.TexStackEditor.Editor.Services
             blenderShader.SetFloat("_LayerOpacity", configuration.Opacity);
             blenderShader.SetInt("_LayerBlendMode", (int)configuration.BlendMode);
 
-            blenderShader.SetVector("_LayerCompositePosition", new Vector2(configuration.CompositePosition.x / canvasWidth, configuration.CompositePosition.y / canvasHeight));
+            blenderShader.SetVector("_LayerCompositePosition", new Vector2((float)configuration.CompositePosition.x / canvasWidth, (float)configuration.CompositePosition.y / canvasHeight));
             blenderShader.SetVector("_LayerCompositeScale", configuration.CompositeScale);
+            blenderShader.SetFloat("_LayerCompositeRotation", configuration.CompositeRotation);
 
             int threadGroupX = Mathf.CeilToInt(canvasWidth / 16.0f);
             int threadGroupY = Mathf.CeilToInt(canvasHeight / 16.0f);

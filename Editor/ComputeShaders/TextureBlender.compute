@@ -19,6 +19,7 @@ int _LayerBlendMode;
 
 float2 _LayerCompositePosition;
 float2 _LayerCompositeScale;
+float _LayerCompositeRotation;
 
 float3 BlendColor(float3 baseRgb, float3 layerRgb, int blendMode)
 {
@@ -83,7 +84,17 @@ void CSMain(uint3 id : SV_DispatchThreadID)
     
     float4 baseCol = _BaseTex.SampleLevel(sampler_BaseTex, uv, 0);
 
-    float2 layerUV = (uv - _LayerCompositePosition) / (_LayerTexScale * _LayerCompositeScale);
+    float2 layerSizeUV = _LayerTexScale * _LayerCompositeScale;
+    float2 layerCenter = _LayerCompositePosition + layerSizeUV * 0.5;
+    float2 delta = uv - layerCenter;
+    float angle = radians(_LayerCompositeRotation);
+    float cosAngle = cos(angle);
+    float sinAngle = sin(angle);
+    float2 rotated = float2(
+        delta.x * cosAngle - delta.y * sinAngle,
+        delta.x * sinAngle + delta.y * cosAngle
+    );
+    float2 layerUV = rotated / layerSizeUV + 0.5;
     float4 layerCol = _LayerTex.SampleLevel(sampler_LayerTex, layerUV, 0);
 
     // レイヤーがテクスチャ範囲外にはみ出した部分は透明にする
