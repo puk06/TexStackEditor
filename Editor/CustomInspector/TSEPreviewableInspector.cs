@@ -1,7 +1,6 @@
 #nullable enable
 using net.puk06.TexStackEditor.Editor.Models;
 using net.puk06.TexStackEditor.Editor.Utils;
-using UnityEditor;
 using UnityEngine;
 using UnityEditor;
 
