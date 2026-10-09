@@ -241,7 +241,11 @@ namespace net.puk06.TexStackEditor.Editor
             where T: Component
         {
             var tseObject = new GameObject(objectName);
-            if (parentObject != null) tseObject.transform.SetParent(parentObject.transform);
+            if (parentObject != null)
+            {
+                tseObject.transform.SetParent(parentObject.transform);
+                tseObject.transform.SetAsFirstSibling();
+            }
 
             T component = Undo.AddComponent<T>(tseObject);
             Undo.RegisterCreatedObjectUndo(tseObject , "Create TSE Object");
