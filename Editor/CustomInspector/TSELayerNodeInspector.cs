@@ -16,6 +16,16 @@ namespace net.puk06.TexStackEditor.Editor
 
             return TextureBuilder.BuildNode(component);
         }
+        public override ExtendedRenderTexture? GenerateParentPreview()
+        {
+            var component = target as TSELayerNode;
+            if (component == null) return null;
+
+            var parentComponent = component.GetComponentInParent<TSELayerStack>();
+            if (parentComponent == null) return null;
+
+            return TextureBuilder.Build(parentComponent);
+        }
 
         public void DrawInspectorGUI()
         {
@@ -63,6 +73,9 @@ namespace net.puk06.TexStackEditor.Editor
                 };
 
                 blendModeProperty.enumValueIndex = EditorGUILayout.Popup(LocalizationUtils.Localize("Inspector.LayerNode.Component.BlendMode"), blendModeProperty.enumValueIndex, blendModeLabels);
+
+                EditorGUILayout.PropertyField(LayerNodeConfigurationProp.FindPropertyRelative("CompositePosition"), new GUIContent(LocalizationUtils.Localize("Inspector.LayerNode.Component.CompositePosition")));
+                EditorGUILayout.PropertyField(LayerNodeConfigurationProp.FindPropertyRelative("CompositeScale"), new GUIContent(LocalizationUtils.Localize("Inspector.LayerNode.Component.CompositeScale")));
                 
                 EditorGUI.indentLevel = 1;
             }

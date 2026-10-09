@@ -17,6 +17,7 @@ namespace net.puk06.TexStackEditor.Editor
             
             return TextureBuilder.Build(component);
         }
+        public override ExtendedRenderTexture? GenerateParentPreview() => null;
 
         public override void OnInspectorGUI()
         {

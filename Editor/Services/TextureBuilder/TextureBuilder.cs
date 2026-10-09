@@ -25,7 +25,7 @@ namespace net.puk06.TexStackEditor.Editor.Services
                     if (result == null && !ExtendedRenderTexture.TryCreate(layerTexture.width, layerTexture.height, out result))
                         return null;
 
-                    var blendedTexture = Blend(result, layerTexture, node.LayerNodeConfiguration.Opacity, node.LayerNodeConfiguration.BlendMode);
+                    var blendedTexture = Blend(result, layerTexture, node.LayerNodeConfiguration);
                     if (blendedTexture == null)
                     {
                         result.Dispose();
@@ -65,7 +65,7 @@ namespace net.puk06.TexStackEditor.Editor.Services
 
                     if (layerProcessedTexture == null) return null;
 
-                    var blendedTexture = Blend(layerProcessedTexture, layerTexture, node.LayerNodeConfiguration.Opacity, node.LayerNodeConfiguration.BlendMode);
+                    var blendedTexture = Blend(layerProcessedTexture, layerTexture, node.LayerNodeConfiguration);
                     if (blendedTexture == null)
                     {
                         layerProcessedTexture.Dispose();
@@ -108,7 +108,7 @@ namespace net.puk06.TexStackEditor.Editor.Services
             }
         }
 
-        private static ExtendedRenderTexture? Blend(RenderTexture baseTexture, RenderTexture layerTexture, float layerOpacity, LayerBlendMode layerBlendMode)
+        private static ExtendedRenderTexture? Blend(RenderTexture baseTexture, RenderTexture layerTexture, LayerNodeConfiguration configuration)
         {
             var blenderShader = TSEShaderEngine.TextureBlenderComputeShader;
             if (blenderShader == null) TSEShaderEngine.LoadShaders();
@@ -139,8 +139,11 @@ namespace net.puk06.TexStackEditor.Editor.Services
             blenderShader.SetVector("_BaseTexScale", baseScale);
             blenderShader.SetVector("_LayerTexScale", layerScale);
 
-            blenderShader.SetFloat("_LayerOpacity", layerOpacity);
-            blenderShader.SetInt("_LayerBlendMode", (int)layerBlendMode);
+            blenderShader.SetFloat("_LayerOpacity", configuration.Opacity);
+            blenderShader.SetInt("_LayerBlendMode", (int)configuration.BlendMode);
+
+            blenderShader.SetVector("_LayerCompositePosition", new Vector2(configuration.CompositePosition.x / canvasWidth, configuration.CompositePosition.y / canvasHeight));
+            blenderShader.SetVector("_LayerCompositeScale", configuration.CompositeScale);
 
             int threadGroupX = Mathf.CeilToInt(canvasWidth / 16.0f);
             int threadGroupY = Mathf.CeilToInt(canvasHeight / 16.0f);

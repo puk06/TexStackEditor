@@ -17,6 +17,9 @@ float2 _LayerTexScale;
 float _LayerOpacity;
 int _LayerBlendMode;
 
+float2 _LayerCompositePosition;
+float2 _LayerCompositeScale;
+
 float3 BlendColor(float3 baseRgb, float3 layerRgb, int blendMode)
 {
     if (blendMode == 1)
@@ -80,7 +83,14 @@ void CSMain(uint3 id : SV_DispatchThreadID)
     
     float4 baseCol = _BaseTex.SampleLevel(sampler_BaseTex, uv, 0);
 
-    float4 layerCol = _LayerTex.SampleLevel(sampler_LayerTex, uv, 0);
+    float2 layerUV = (uv - _LayerCompositePosition) / (_LayerTexScale * _LayerCompositeScale);
+    float4 layerCol = _LayerTex.SampleLevel(sampler_LayerTex, layerUV, 0);
+
+    // レイヤーがテクスチャ範囲外にはみ出した部分は透明にする
+    if (layerUV.x < 0.0 || layerUV.x > 1.0 || layerUV.y < 0.0 || layerUV.y > 1.0)
+    {
+        layerCol = float4(0, 0, 0, 0);
+    }
 
     layerCol.a = layerCol.a * _LayerOpacity;
 

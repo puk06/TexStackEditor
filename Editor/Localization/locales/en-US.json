@@ -25,6 +25,8 @@
     "Inspector.LayerNode.Component.IsVisible": "Layer Visibility",
     "Inspector.LayerNode.Component.Opacity": "Opacity",
     "Inspector.LayerNode.Component.BlendMode": "Blend Mode",
+    "Inspector.LayerNode.Component.CompositePosition": "Composite Position",
+    "Inspector.LayerNode.Component.CompositeScale": "Composite Scale",
     "Inspector.LayerNode.Component.BlendMode.Options.Normal": "Normal",
     "Inspector.LayerNode.Component.BlendMode.Options.Multiply": "Multiply",
     "Inspector.LayerNode.Component.BlendMode.Options.Screen": "Screen",
