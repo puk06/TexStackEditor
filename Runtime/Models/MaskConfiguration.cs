@@ -26,6 +26,7 @@ namespace net.puk06.TexStackEditor.Models
 
             if (SerializationVersion == 0)
             {
+                // 旧バージョンの 6/7 は BlackGlayScale/WhiteGlayScale だったため、現在の 6/7 (Alpha/AlphaInverse) とは別物として扱う
                 if ((int)MaskSelectionType == 6) MaskSelectionType = MaskSelectionType.Black;
                 else if ((int)MaskSelectionType == 7) MaskSelectionType = MaskSelectionType.White;
             }

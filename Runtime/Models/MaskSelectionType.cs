@@ -8,7 +8,7 @@ namespace net.puk06.TexStackEditor.Models
         Opaque,
         Opaque1,
         Transparent,
-        BlackGlayScale,
-        WhiteGlayScale
+        Alpha,
+        AlphaInverse
     }
 }

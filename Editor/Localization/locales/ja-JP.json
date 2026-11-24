@@ -50,6 +50,8 @@
     "Inspector.LayerNode.Component.MaskSelectionType.Options.White": "白",
     "Inspector.LayerNode.Component.MaskSelectionType.Options.Opaque": "不透明",
     "Inspector.LayerNode.Component.MaskSelectionType.Options.Transparent": "透明",
+    "Inspector.LayerNode.Component.MaskSelectionType.Options.Alpha": "アルファ (A の値)",
+    "Inspector.LayerNode.Component.MaskSelectionType.Options.AlphaInverse": "アルファ (A の値・反転)",
     "Inspector.LayerNode.Component.MaskBlendSettings.IsBackgroundTransparent": "背景の透明化",
 
     "Inspector.LayerNode.Component.ColorAdjustmentConfiguration.IsEnabled": "有効化",
